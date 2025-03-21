@@ -1,9 +1,3 @@
 # Compiler Design Lecture Project
 
-## Possible groups
-- If/ElseIf/Else Statement
-- While Loop
-- Do-While Loop
-- For Loop
-- Switch-Case-Default
-- Function Definition / Call
+Interpreter project, accompanying the compiler design lecture for TINF23B6.
