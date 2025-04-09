@@ -5,11 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.*;
 import java.nio.file.Path;
 
+/**
+ * Reader class for reading characters from a file.
+ * Input: File path
+ * Output: Character stream from file
+ */
 @Slf4j
 public class Reader implements IReader {
 
   private BufferedReader inputReader;
-  private char currentChar = '\0';
+  private char currentChar;
   private CodeLoc currentCodeLoc = new CodeLoc(1, 0);
   private boolean eofReached = false;
 
