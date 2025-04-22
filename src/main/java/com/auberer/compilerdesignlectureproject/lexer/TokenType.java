@@ -3,8 +3,54 @@ package com.auberer.compilerdesignlectureproject.lexer;
 public enum TokenType {
   TOK_INVALID,
   TOK_STRING_LIT,
+  TOK_DOUBLE_LIT,
+  TOK_INT_LIT,
+  TOK_IDENTIFIER,
 
-  // ToDo(Students): Insert your token types here
+  TOK_TYPE_INT,
+  TOK_TYPE_DOUBLE,
+  TOK_TYPE_STRING,
+
+  TOK_IF,
+  TOK_ELSE,
+  TOK_SWITCH,
+  TOK_CASE,
+  TOK_DEFAULT,
+  TOK_WHILE,
+  TOK_DO,
+  TOK_FOR,
+
+  TOK_FUNC,
+  TOK_RETURN,
+
+  TOK_CALL,
+  TOK_PRINT,
+
+  TOK_LBRACE,
+  TOK_RBRACE,
+  TOK_LPAREN,
+  TOK_RPAREN,
+  TOK_LBRACKET,
+  TOK_RBRACKET,
+  TOK_SEMICOLON,
+  TOK_COMMA,
+  TOK_DOT,
+
+  TOK_ASSIGN,
+  TOK_EQUAL,
+  TOK_NOT,
+  TOK_NOT_EQUAL,
+  TOK_LT,
+  TOK_GT,
+  TOK_LE,
+  TOK_GE,
+  TOK_AND,
+  TOK_OR,
+  TOK_PLUS,
+  TOK_MINUS,
+  TOK_MUL,
+  TOK_DIV,
+  TOK_MOD,
 
   TOK_EOF,
 }
