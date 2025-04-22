@@ -5,13 +5,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SymbolStateMachineTest {
+public class PunctuationStateMachineTest {
 
   @Test
-  @DisplayName("Happy path: Valid keyword 'if'")
-  public void testKeywordIf() {
+  @DisplayName("Happy path: Valid punctuation")
+  public void testPunctuation() {
     String input = "{";
-    KeywordStateMachine stateMachine = new SymbolStateMachine("{", TokenType.TOK_LBRACE);
+    PunctuationStateMachine stateMachine = new PunctuationStateMachine("{", TokenType.TOK_LBRACE);
     stateMachine.init();
     stateMachine.reset();
     for (char c : input.toCharArray()) {
@@ -22,10 +22,10 @@ public class SymbolStateMachineTest {
   }
 
   @Test
-  @DisplayName("Test non-keyword input as identifier")
-  public void testNonKeywordInput() {
+  @DisplayName("Test non-punctuation input")
+  public void testNonPunctuationInput() {
     String input = "123.123";
-    KeywordStateMachine stateMachine = new KeywordStateMachine("{if}", TokenType.TOK_LBRACE);
+    PunctuationStateMachine stateMachine = new PunctuationStateMachine("{if}", TokenType.TOK_LBRACE);
     stateMachine.init();
     stateMachine.reset();
 
