@@ -1,46 +1,54 @@
-// Grammar for the TINF programming language
-grammar tinf;
+// Grammar for the TInf programming language
+grammar TInf;
 
+// Misc
 entry: fctDef+;
-fctDef: type IDENTIFIER COLON ASSIGN LPAREN paramLst? RPAREN LBRACE stmtLst RBRACE;
-paramLst: param (SEMICOLON param)*;
-param: type IDENTIFIER (ASSIGN atomicExpr)?;
 stmtLst: stmt*;
-stmt: exprStmt | varDeclStmt | returnStmt | ifStmt | whileLoop | doWhileLoop | forLoop | switchCaseStmt | anonymousBlockStmt;
-exprStmt: assignStmt SEMICOLON;
+stmt: varDeclStmt | assignStmt | returnStmt | ifStmt | whileLoop | doWhileLoop | forLoop | switchCaseStmt | anonymousBlockStmt;
 varDeclStmt: type IDENTIFIER ASSIGN ternaryExpr SEMICOLON;
-assignStmt: (IDENTIFIER ASSIGN)? ternaryExpr;
+assignStmt: assignExpr SEMICOLON;
+assignExpr: (IDENTIFIER ASSIGN)? ternaryExpr;
+printBuiltinCall: PRINT LPAREN ternaryExpr RPAREN;
+literal: INT_LIT | DOUBLE_LIT | STRING_LIT;
+type: TYPE_INT | TYPE_DOUBLE | TYPE_STRING | TYPE_BOOL;
 
+// Team 1: If/Else statement
 ifStmt: IF LPAREN ternaryExpr RPAREN ifBody elseStmt?;
 ifBody: LBRACE stmtLst RBRACE;
 elseStmt: ELSE (ifBody | ifStmt);
 
+// Team 2: While loop
 whileLoop: WHILE LPAREN ternaryExpr RPAREN LBRACE stmtLst RBRACE;
 
+// Team 3: Do-while loop
 doWhileLoop: DO LBRACE stmtLst RBRACE WHILE LPAREN ternaryExpr RPAREN SEMICOLON;
 
-forLoop: FOR LPAREN varDeclStmt ternaryExpr SEMICOLON assignStmt RPAREN LBRACE stmtLst RBRACE;
+// Team 4: Function Definition / Function Call
+fctDef: type IDENTIFIER COLON ASSIGN LPAREN paramLst? RPAREN LBRACE stmtLst RBRACE;
+paramLst: param (SEMICOLON param)*;
+param: type IDENTIFIER (ASSIGN atomicExpr)?;
+fctCall: IDENTIFIER LPAREN argLst RPAREN;
+argLst: atomicExpr (SEMICOLON atomicExpr)*;
+returnStmt: RET ternaryExpr SEMICOLON;
 
+// Team 5: For loop
+forLoop: FOR LPAREN varDeclStmt ternaryExpr SEMICOLON assignExpr RPAREN LBRACE stmtLst RBRACE;
+
+// Team 6: Switch / Case / Default
 switchCaseStmt: SWITCH LPAREN ternaryExpr RPAREN LBRACE caseBlockLst defaultBlock? RBRACE;
 caseBlockLst: caseBlock+;
 caseBlock: CASE literal COLON stmtLst;
 defaultBlock: DEFAULT COLON stmtLst;
 
+// Team 7: Anonymous Block Statement
 anonymousBlockStmt: LBRACE stmtLst RBRACE;
 
+// Expression loop
 ternaryExpr: equalityExpr (QUESTION_MARK equalityExpr COLON equalityExpr)?;
 equalityExpr: additiveExpr ((EQUALS | NOT_EQUALS) additiveExpr)?;
 additiveExpr: multiplicativeExpr ((PLUS | MINUS) multiplicativeExpr)*;
 multiplicativeExpr: atomicExpr ((MUL | DIV) atomicExpr)*;
-atomicExpr: literal | fctCall | IDENTIFIER | LPAREN ternaryExpr RPAREN;
-
-returnStmt: RET ternaryExpr SEMICOLON;
-
-fctCall: IDENTIFIER LPAREN argLst RPAREN;
-argLst: atomicExpr (SEMICOLON atomicExpr)*;
-
-literal: INT_LIT | DOUBLE_LIT | STRING_LIT;
-type: TYPE_INT | TYPE_DOUBLE | TYPE_STRING | TYPE_BOOL;
+atomicExpr: literal | fctCall | printBuiltinCall | IDENTIFIER | LPAREN ternaryExpr RPAREN;
 
 QUESTION_MARK: '?';
 COLON: ':';
@@ -65,6 +73,7 @@ SWITCH: 'switch';
 CASE: 'case';
 DEFAULT: 'default';
 RET: 'ret';
+PRINT: 'print';
 TYPE_INT: 'int';
 TYPE_DOUBLE: 'double';
 TYPE_STRING: 'string';
