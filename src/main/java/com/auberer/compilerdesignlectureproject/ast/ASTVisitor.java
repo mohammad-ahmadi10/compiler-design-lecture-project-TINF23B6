@@ -20,6 +20,10 @@ public class ASTVisitor<T> {
     return visitChildren(node);
   }
 
+  T visitPrintBuiltin(ASTPrintBuiltinCallNode node) {
+    return visitChildren(node);
+  }
+
   // ToDo(Students): Insert your visit methods here
 
 }
