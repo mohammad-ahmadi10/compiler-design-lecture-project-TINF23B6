@@ -36,7 +36,7 @@ public class LexerTest {
     assertDoesNotThrow(() -> lexer.expect(TokenType.TOK_DO));
     assertDoesNotThrow(() -> lexer.expect(TokenType.TOK_FOR));
     assertDoesNotThrow(() -> lexer.expect(TokenType.TOK_FUNC));
-    assertDoesNotThrow(() -> lexer.expect(TokenType.TOK_RETURN));
+    assertDoesNotThrow(() -> lexer.expect(TokenType.TOK_RET));
     assertDoesNotThrow(() -> lexer.expect(TokenType.TOK_CALL));
     assertDoesNotThrow(() -> lexer.expect(TokenType.TOK_PRINT));
 

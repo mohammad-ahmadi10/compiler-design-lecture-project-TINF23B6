@@ -10,6 +10,7 @@ public enum TokenType {
   TOK_TYPE_INT,
   TOK_TYPE_DOUBLE,
   TOK_TYPE_STRING,
+  TOK_TYPE_BOOL,
 
   TOK_IF,
   TOK_ELSE,
@@ -21,7 +22,7 @@ public enum TokenType {
   TOK_FOR,
 
   TOK_FUNC,
-  TOK_RETURN,
+  TOK_RET,
 
   TOK_CALL,
   TOK_PRINT,

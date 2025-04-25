@@ -41,7 +41,7 @@ public class Lexer implements ILexer {
     stateMachines.add(new KeywordStateMachine("for", TokenType.TOK_FOR));
 
     stateMachines.add(new KeywordStateMachine("func", TokenType.TOK_FUNC));
-    stateMachines.add(new KeywordStateMachine("return", TokenType.TOK_RETURN));
+    stateMachines.add(new KeywordStateMachine("return", TokenType.TOK_RET));
 
     stateMachines.add(new KeywordStateMachine("call", TokenType.TOK_CALL));
     stateMachines.add(new KeywordStateMachine("print", TokenType.TOK_PRINT));
