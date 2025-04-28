@@ -8,6 +8,7 @@ import com.auberer.compilerdesignlectureproject.lexer.TokenType;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -39,17 +40,98 @@ public class Parser implements IParser {
   public ASTEntryNode parse() {
     ASTEntryNode node = new ASTEntryNode();
     enterNode(node);
-
+    Set<TokenType> selectionSet = ASTFunctionDefNode.getSelectionSet();
+    if  (selectionSet.contains(lexer.getToken().getType())){
     do {
-      parseFctDef();
+      node.addChild(parseFctDef());
     } while (!lexer.isEOF());
-
+    }else{
+      throw new RuntimeException("Need at least one function definition");
+    }
     exitNode(node);
     return node;
   }
 
-  public void parseFctDef() {
-    // ToDo(Team 4)
+  public ASTFunctionDefNode parseFctDef() {
+    ASTFunctionDefNode node = new ASTFunctionDefNode();
+    enterNode(node);
+    ASTNode childnode = new ASTTypeNode();
+    node.addChild(childnode);
+    lexer.expect(TokenType.TOK_IDENTIFIER);
+    lexer.expect(TokenType.TOK_COLON);
+    lexer.expect(TokenType.TOK_ASSIGN);
+    lexer.expect(TokenType.TOK_LPAREN);
+    Set<TokenType> selectionSet = ASTParamLstNode.getSelectionSet();
+    if (selectionSet.contains(lexer.getToken().getType())){
+      childnode = parseParamLst();
+      node.addChild(childnode);
+    }
+    lexer.expect(TokenType.TOK_RPAREN);
+    lexer.expect(TokenType.TOK_LBRACE);
+    childnode = parseStmtLst();
+    node.addChild(childnode);
+    lexer.expect(TokenType.TOK_RBRACE);
+    exitNode(node);
+    return node;
+  }
+
+  public ASTFunctionCallNode parseFctCall() {
+    ASTFunctionCallNode node = new ASTFunctionCallNode();
+    enterNode(node);
+    lexer.expect(TokenType.TOK_CALL);
+    lexer.expect(TokenType.TOK_IDENTIFIER);
+    lexer.expect(TokenType.TOK_LPAREN);
+    Set<TokenType> selectionSet = ASTArgLstNode.getSelectionSet();
+    if (selectionSet.contains(lexer.getToken().getType())) {
+      ASTArgLstNode childnode = parseArgLst();
+      node.addChild(childnode);
+    }
+    lexer.expect(TokenType.TOK_RPAREN);
+    exitNode(node);
+    return node;
+  }
+
+  public ASTParamLstNode parseParamLst() {
+    ASTParamLstNode node = new ASTParamLstNode();
+    enterNode(node);
+    ASTParamNode childnode = parseParam();
+    node.addChild(childnode);
+    while(lexer.getToken().getType().equals(TokenType.TOK_SEMICOLON)) {
+      lexer.expect(TokenType.TOK_SEMICOLON);
+      childnode = parseParam();
+      node.addChild(childnode);
+    }
+    exitNode(node);
+    return node;
+  }
+
+  private ASTParamNode parseParam() {
+    ASTParamNode node = new ASTParamNode();
+    enterNode(node);
+    ASTNode childnode = parseType();
+    node.addChild(childnode);
+    lexer.expect(TokenType.TOK_IDENTIFIER);
+    if(lexer.getToken().getType() == TokenType.TOK_ASSIGN){
+      lexer.expect(TokenType.TOK_ASSIGN);
+      childnode = parseAtomicExpr();
+      node.addChild(childnode);
+    }
+    exitNode(node);
+    return node;
+  }
+
+  public ASTArgLstNode parseArgLst() {
+    ASTArgLstNode node = new ASTArgLstNode();
+    enterNode(node);
+    ASTNode childnode = parseAtomicExpr();
+    node.addChild(childnode);
+    while(lexer.getToken().getType().equals(TokenType.TOK_SEMICOLON)) {
+      lexer.expect(TokenType.TOK_SEMICOLON);
+      childnode = parseAtomicExpr();
+      node.addChild(childnode);
+    }
+    exitNode(node);
+    return node;
   }
 
   public ASTStmtLstNode parseStmtLst() {
@@ -84,6 +166,8 @@ public class Parser implements IParser {
       childNode = parseForLoop();
     } else if (ASTAnonymousBlockStmtNode.getSelectionSet().contains(tokenType)) {
       childNode = parseAnonymousBlockStmt();
+    } else if (ASTFunctionCallNode.getSelectionSet().contains(tokenType)) {
+      childNode = parseFctCall();
     }
     // ToDo(Marc): Add others
     node.addChild(childNode);
