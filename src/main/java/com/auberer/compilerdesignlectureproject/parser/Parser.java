@@ -402,5 +402,59 @@ public class Parser implements IParser {
     return node;
   }
 
+  public ASTSwitchCaseStmtNode parseSwitchCaseStmt() {
+    ASTSwitchCaseStmtNode node = new ASTSwitchCaseStmtNode();
+    enterNode(node);
+    
+    lexer.expect(TokenType.TOK_SWITCH);
+    lexer.expect(TokenType.TOK_LPAREN);
+    ASTTernaryExprNode switchExpr = new ASTTernaryExprNode();
+    node.addChild(switchExpr);
+    lexer.expect(TokenType.TOK_RPAREN);
+    lexer.expect(TokenType.TOK_LBRACE);
+
+    do {
+      ASTCaseStmtNode caseStmt = new ASTCaseStmtNode();
+      node.addChild(caseStmt);
+    } while (lexer.getToken().getType() == TokenType.TOK_CASE);
+
+    if (lexer.getToken().getType() == TokenType.TOK_DEFAULT) {
+      ASTDefaultStmtNode defaultStmt = new ASTDefaultStmtNode();
+      node.addChild(defaultStmt);
+    }
+
+    lexer.expect(TokenType.TOK_RBRACE);
+
+    exitNode(node);
+    return node;
+  }
+
+  public ASTCaseStmtNode parseCaseStmt() {
+    ASTCaseStmtNode node = new ASTCaseStmtNode();
+    enterNode(node);
+
+    lexer.expect(TokenType.TOK_CASE);
+    ASTLiteralNode caseLiteral = parseLiteral();
+    node.addChild(caseLiteral);
+    lexer.expect(TokenType.TOK_COLON);
+    ASTStmtLstNode caseStmtLst = parseStmtLst();
+    node.addChild(caseStmtLst);
+
+    exitNode(node);
+    return node;
+  }
+
+  public ASTDefaultStmtNode parseDefaultStmt() {
+    ASTDefaultStmtNode node = new ASTDefaultStmtNode();
+    enterNode(node);
+
+    lexer.expect(TokenType.TOK_DEFAULT);
+    lexer.expect(TokenType.TOK_COLON);
+    ASTStmtLstNode defaultStmtLst = parseStmtLst();
+    node.addChild(defaultStmtLst);
+
+    exitNode(node);
+    return node;
+  }
 
 }
