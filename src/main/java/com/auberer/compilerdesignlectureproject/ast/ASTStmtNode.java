@@ -16,7 +16,7 @@ public class ASTStmtNode extends ASTNode {
     selectionSet.addAll(ASTVarDeclNode.getSelectionSet());
     selectionSet.addAll(ASTAssignStmtNode.getSelectionSet());
     selectionSet.addAll(ASTReturnStmtNode.getSelectionSet());
-    // ToDo(Marc): Add others
+    selectionSet.addAll(ASTIfStmtNode.getSelectionSet());
     selectionSet.addAll(ASTWhileLoopStmtNode.getSelectionSet());
     selectionSet.addAll(ASTDoWhileLoopNode.getSelectionSet());
     selectionSet.addAll(ASTForLoopNode.getSelectionSet());

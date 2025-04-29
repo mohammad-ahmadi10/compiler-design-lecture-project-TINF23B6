@@ -166,6 +166,8 @@ public class Parser implements IParser {
       parseAssignStmt();
     } else if (ASTReturnStmtNode.getSelectionSet().contains(tokenType)) {
       parseReturnStmt();
+    } else if (ASTIfStmtNode.getSelectionSet().contains(tokenType)) {
+      parseIfStmt();
     } else if (ASTWhileLoopStmtNode.getSelectionSet().contains(tokenType)) {
       parseWhileLoopStmt();
     } else if (ASTDoWhileLoopNode.getSelectionSet().contains(tokenType)) {
@@ -179,7 +181,6 @@ public class Parser implements IParser {
     } else if (ASTFunctionCallNode.getSelectionSet().contains(tokenType)) {
       parseFctCall();
     }
-    // ToDo(Marc): Add others
 
     exitNode(node);
     return node;
@@ -266,6 +267,53 @@ public class Parser implements IParser {
       throw new RuntimeException("Unexpected token type: " + tokenType);
     }
     lexer.expect(tokenType);
+
+    exitNode(node);
+    return node;
+  }
+
+  public ASTIfStmtNode parseIfStmt() {
+    ASTIfStmtNode node = new ASTIfStmtNode();
+    enterNode(node);
+
+    lexer.expect(TokenType.TOK_IF);
+    lexer.expect(TokenType.TOK_LPAREN);
+    parseTernaryExpr();
+    lexer.expect(TokenType.TOK_RPAREN);
+    parseIfBody();
+
+    if (ASTElseStmtNode.getSelectionSet().contains(lexer.getToken().getType())) {
+      parseElseStmt();
+    }
+
+    exitNode(node);
+    return node;
+  }
+
+  public ASTIfBodyNode parseIfBody() {
+    ASTIfBodyNode node = new ASTIfBodyNode();
+    enterNode(node);
+
+    lexer.expect(TokenType.TOK_LBRACE);
+    parseStmtLst();
+    lexer.expect(TokenType.TOK_RBRACE);
+
+    exitNode(node);
+    return node;
+  }
+
+  public ASTElseStmtNode parseElseStmt() {
+    ASTElseStmtNode node = new ASTElseStmtNode();
+    enterNode(node);
+
+    lexer.expect(TokenType.TOK_ELSE);
+
+    TokenType tokenType = lexer.getToken().getType();
+    if (ASTIfStmtNode.getSelectionSet().contains(tokenType)) {
+      parseIfStmt();
+    } else if (ASTIfBodyNode.getSelectionSet().contains(tokenType)) {
+      parseIfBody();
+    }
 
     exitNode(node);
     return node;
@@ -477,59 +525,6 @@ public class Parser implements IParser {
       lexer.expect(TokenType.TOK_LPAREN);
       parseTernaryExpr();
       lexer.expect(TokenType.TOK_RPAREN);
-    }
-
-    exitNode(node);
-    return node;
-  }
-
-  public ASTIfStmtNode parseIfStmt() {
-    ASTIfStmtNode node = new ASTIfStmtNode();
-    enterNode(node);
-
-    lexer.expect(TokenType.TOK_IF);
-    lexer.expect(TokenType.TOK_LPAREN);
-    ASTTernaryExprNode condition = parseTernaryExpr();
-    node.addChild(condition);
-    lexer.expect(TokenType.TOK_RPAREN);
-    ASTIfBodyNode ifBody = new ASTIfBodyNode();
-    node.addChild(ifBody);
-
-    if (lexer.getToken().getType() == TokenType.TOK_ELSE) {
-      ASTElseStmtNode elseStmt = parseElseStmt();
-      node.addChild(elseStmt);
-    }
-
-    exitNode(node);
-
-    return node;
-  }
-
-  public ASTIfBodyNode parseIfBody() {
-    ASTIfBodyNode node = new ASTIfBodyNode();
-    enterNode(node);
-
-    lexer.expect(TokenType.TOK_LBRACE);
-    ASTStmtLstNode stmtLst = parseStmtLst();
-    node.addChild(stmtLst);
-    lexer.expect(TokenType.TOK_RBRACE);
-
-    exitNode(node);
-    return node;
-  }
-
-  public ASTElseStmtNode parseElseStmt() {
-    ASTElseStmtNode node = new ASTElseStmtNode();
-    enterNode(node);
-
-    lexer.expect(TokenType.TOK_ELSE);
-
-    if (lexer.getToken().getType() == TokenType.TOK_IF) {
-      ASTIfStmtNode ifStmt = parseIfStmt();
-      node.addChild(ifStmt);
-    } else if (lexer.getToken().getType() == TokenType.TOK_LBRACE) {
-      ASTIfBodyNode ifBody = parseIfBody();
-      node.addChild(ifBody);
     }
 
     exitNode(node);

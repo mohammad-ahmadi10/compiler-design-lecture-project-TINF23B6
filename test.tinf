@@ -6,6 +6,15 @@ double getDbl := (double x) {
 int main := () {
     int i = 3;
 
+    # If stmt
+    if (i != 4) {
+        i = 3;
+    } else if (i != 5) {
+        i = 4;
+    } else {
+        i = 5;
+    }
+
     # While loop
     while (i == 3) {
         i = i - 1;

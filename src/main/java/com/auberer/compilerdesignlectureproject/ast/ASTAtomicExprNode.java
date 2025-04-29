@@ -21,7 +21,7 @@ public class ASTAtomicExprNode extends ASTNode {
   public static Set<TokenType> getSelectionSet() {
     Set<TokenType> selectionSet = new HashSet<>();
     selectionSet.addAll(ASTLiteralNode.getSelectionSet());
-    // ToDo(Marc): Add others
+    selectionSet.addAll(ASTFunctionCallNode.getSelectionSet());
     selectionSet.addAll(ASTPrintBuiltinCallNode.getSelectionSet());
     selectionSet.add(TokenType.TOK_IDENTIFIER);
     selectionSet.add(TokenType.TOK_LPAREN);
