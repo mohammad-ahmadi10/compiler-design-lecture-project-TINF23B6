@@ -193,6 +193,19 @@ public class ASTBuilder extends TInfBaseVisitor<ASTNode> {
 
   // Team 3
 
+@Override
+public ASTNode visitDoWhileLoop(TInfParser.DoWhileLoopContext ctx) {
+  ASTDoWhileLoopNode node = new ASTDoWhileLoopNode();
+
+  enterNode(node, ctx);
+
+  visitChildren(ctx);
+
+  exitNode(node);
+  return node;
+}
+
+
   // Team 4
 
   // Team 5 (Das Beste)
