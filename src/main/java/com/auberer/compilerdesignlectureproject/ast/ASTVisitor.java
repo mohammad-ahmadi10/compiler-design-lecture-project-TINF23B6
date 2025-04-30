@@ -4,11 +4,11 @@ public class ASTVisitor<T> {
 
   // Generic visit methods
 
-  T visit(ASTNode node) {
+  public T visit(ASTNode node) {
     return node.accept(this);
   }
 
-  T visitChildren(ASTNode node) {
+  public T visitChildren(ASTNode node) {
     for (ASTNode child : node.getChildren())
       child.accept(this);
     return null;
@@ -16,11 +16,11 @@ public class ASTVisitor<T> {
 
   // Node-specific visit methods
 
-  T visitEntry(ASTEntryNode node) {
+  public T visitEntry(ASTEntryNode node) {
     return visitChildren(node);
   }
 
-  T visitPrintBuiltin(ASTPrintBuiltinCallNode node) {
+  public T visitPrintBuiltin(ASTPrintBuiltinCallNode node) {
     return visitChildren(node);
   }
 
@@ -32,83 +32,83 @@ public class ASTVisitor<T> {
     return visitChildren(node);
   }
 
-  T visitVarDecl(ASTVarDeclNode node) {
+  public T visitVarDecl(ASTVarDeclNode node) {
     return visitChildren(node);
   }
 
-  T visitAssignExpr(ASTAssignExprNode node) {
+  public T visitAssignExpr(ASTAssignExprNode node) {
     return visitChildren(node);
   }
 
-  T visitAssignStmt(ASTAssignStmtNode node) {
+  public T visitAssignStmt(ASTAssignStmtNode node) {
     return visitChildren(node);
   }
 
-  T visitLiteral(ASTLiteralNode node) {
+  public T visitLiteral(ASTLiteralNode node) {
     return visitChildren(node);
   }
 
-  T visitType(ASTTypeNode node) {
+  public T visitType(ASTTypeNode node) {
     return visitChildren(node);
   }
 
-  T visitTernaryExpr(ASTTernaryExprNode node) {
+  public T visitTernaryExpr(ASTTernaryExprNode node) {
     return visitChildren(node);
   }
 
-  T visitEqualityExpr(ASTEqualityExprNode node) {
+  public T visitEqualityExpr(ASTEqualityExprNode node) {
     return visitChildren(node);
   }
 
-  T visitAdditiveExpr(ASTAdditiveExprNode node) {
+  public T visitAdditiveExpr(ASTAdditiveExprNode node) {
     return visitChildren(node);
   }
 
-  T visitMultiplicativeExpr(ASTMultiplicativeExprNode node) {
+  public T visitMultiplicativeExpr(ASTMultiplicativeExprNode node) {
     return visitChildren(node);
   }
 
-  T visitAtomicExpr(ASTAtomicExprNode node) {
+  public T visitAtomicExpr(ASTAtomicExprNode node) {
     return visitChildren(node);
   }
 
-  T visitDoWhileLoop(ASTDoWhileLoopNode node) {
+  public T visitDoWhileLoop(ASTDoWhileLoopNode node) {
     return visitChildren(node);
   }
 
-  T visitAnonymousBlockStmt(ASTAnonymousBlockStmtNode node) {
+  public T visitAnonymousBlockStmt(ASTAnonymousBlockStmtNode node) {
     return visitChildren(node);
   }
 
-  T visitIfStmt(ASTIfStmtNode node) {
+  public T visitIfStmt(ASTIfStmtNode node) {
     return visitChildren(node);
   }
 
-  T visitIfBody(ASTIfBodyNode node) {
+  public T visitIfBody(ASTIfBodyNode node) {
     return visitChildren(node);
   }
 
-  T visitElseStmt(ASTElseStmtNode node) {
+  public T visitElseStmt(ASTElseStmtNode node) {
     return visitChildren(node);
   }
 
-  T visitWhileLoopStmt(ASTWhileLoopStmtNode node) {
+  public T visitWhileLoopStmt(ASTWhileLoopStmtNode node) {
     return visitChildren(node);
   }
 
-  T visitForLoop(ASTForLoopNode node) {
+  public T visitForLoop(ASTForLoopNode node) {
     return visitChildren(node);
   }
 
-  T visitSwitchCaseStmt(ASTSwitchCaseStmtNode node) {
+  public T visitSwitchCaseStmt(ASTSwitchCaseStmtNode node) {
     return visitChildren(node);
   }
 
-  T visitCaseStmt(ASTCaseStmtNode node) {
+  public T visitCaseStmt(ASTCaseStmtNode node) {
     return visitChildren(node);
   }
 
-  T visitDefaultStmt(ASTDefaultStmtNode node) {
+  public T visitDefaultStmt(ASTDefaultStmtNode node) {
     return visitChildren(node);
   }
 }
