@@ -45,6 +45,7 @@ public class Parser implements IParser {
     }
 
     exitNode(node);
+    assert parentStack.empty();
     return node;
   }
 
