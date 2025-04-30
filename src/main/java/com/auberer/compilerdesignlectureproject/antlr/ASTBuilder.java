@@ -3,6 +3,7 @@ package com.auberer.compilerdesignlectureproject.antlr;
 import com.auberer.compilerdesignlectureproject.antlr.gen.TInfBaseVisitor;
 import com.auberer.compilerdesignlectureproject.antlr.gen.TInfParser;
 import com.auberer.compilerdesignlectureproject.ast.*;
+import com.auberer.compilerdesignlectureproject.lexer.TokenType;
 import com.auberer.compilerdesignlectureproject.reader.CodeLoc;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.Token;
@@ -181,6 +182,14 @@ public class ASTBuilder extends TInfBaseVisitor<ASTNode> {
     }
 
   // Team 2
+  @Override
+  public ASTNode visitWhileLoop(TInfParser.WhileLoopContext ctx) {
+    ASTWhileLoopStmtNode node = new ASTWhileLoopStmtNode();
+    enterNode(node, ctx);
+    visitChildren(ctx);
+    exitNode(node);
+    return node;
+  }
 
   // Team 3
 
