@@ -28,6 +28,8 @@ public class ASTBuilder extends TInfBaseVisitor<ASTNode> {
     return node;
   }
 
+
+
   @Override
   public ASTNode visitStmtLst(TInfParser.StmtLstContext ctx) {
     ASTStmtLstNode node = new ASTStmtLstNode();
@@ -207,8 +209,75 @@ public ASTNode visitDoWhileLoop(TInfParser.DoWhileLoopContext ctx) {
 
 
   // Team 4
+  @Override
+  public ASTNode visitArgLst(TInfParser.ArgLstContext ctx){
+    ASTArgLstNode node = new ASTArgLstNode();
+    enterNode(node, ctx);
 
-  // Team 5 (Das Beste)
+    visitChildren(ctx);
+
+    exitNode(node);
+    return node;
+  }
+
+  @Override
+  public ASTNode visitFctCall(TInfParser.FctCallContext ctx){
+    ASTFunctionCallNode node = new ASTFunctionCallNode();
+    enterNode(node, ctx);
+
+    node.setIdentifier(ctx.IDENTIFIER().getText());
+    visitChildren(ctx);
+
+    exitNode(node);
+    return node;
+  }
+
+  @Override
+  public ASTNode visitFctDef(TInfParser.FctDefContext ctx){
+    ASTFunctionDefNode node = new ASTFunctionDefNode();
+    enterNode(node, ctx);
+
+    node.setIdentifier(ctx.IDENTIFIER().getText());
+    visitChildren(ctx);
+
+    exitNode(node);
+    return node;
+  }
+
+  @Override
+  public ASTNode visitParamLst(TInfParser.ParamLstContext ctx){
+    ASTParamLstNode node = new ASTParamLstNode();
+    enterNode(node, ctx);
+
+    visitChildren(ctx);
+
+    exitNode(node);
+    return node;
+  }
+
+  @Override
+  public ASTNode visitParam(TInfParser.ParamContext ctx){
+    ASTParamNode node = new ASTParamNode();
+    enterNode(node, ctx);
+
+    visitChildren(ctx);
+
+    exitNode(node);
+    return node;
+  }
+
+  @Override
+  public ASTNode visitReturnStmt(TInfParser.ReturnStmtContext ctx){
+    ASTParamNode node = new ASTParamNode();
+    enterNode(node, ctx);
+
+    visitChildren(ctx);
+
+    exitNode(node);
+    return node;
+  }
+  
+  // Team 5
   @Override
   public ASTNode visitForLoop(TInfParser.ForLoopContext ctx) {
     ASTForLoopNode node = new ASTForLoopNode();
@@ -219,8 +288,8 @@ public ASTNode visitDoWhileLoop(TInfParser.DoWhileLoopContext ctx) {
     exitNode(node);
     return node;
   }
+  
   // Team 6
-
   @Override
   public ASTNode visitSwitchCaseStmt (TInfParser.SwitchCaseStmtContext ctx) {
     ASTSwitchCaseStmtNode node = new ASTSwitchCaseStmtNode();
