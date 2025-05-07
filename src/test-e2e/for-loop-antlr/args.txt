@@ -1,1 +1,0 @@
--antlr --dump-ast ./src/test-e2e/for-loop-antlr/source.tinf
