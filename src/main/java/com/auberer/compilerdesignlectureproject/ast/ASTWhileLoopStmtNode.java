@@ -21,8 +21,9 @@ public class ASTWhileLoopStmtNode extends ASTNode {
     public ASTStmtLstNode getBody() {
         return getChild(ASTStmtLstNode.class, 0);
     }
+    
     public ASTTernaryExprNode getCondition() {
-        return getChild(ASTTernaryExprNode.class, 1);
+        return getChild(ASTTernaryExprNode.class, 0);
     }
 
 }
