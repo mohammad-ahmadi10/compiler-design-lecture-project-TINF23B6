@@ -18,7 +18,7 @@ public class ASTAnonymousBlockStmtNode extends ASTNode {
         return selectionSet;
     }
 
-    public ASTStmtLstNode getStmntLst() {
+    public ASTStmtLstNode getStmtLst() {
         return getChild(ASTStmtLstNode.class, 0);
     }
 }
