@@ -92,7 +92,7 @@ public class ASTVisitor<T> {
     return visitChildren(node);
   }
 
-  public T visitWhileLoopStmt(ASTWhileLoopStmtNode node) {
+  public T visitWhileLoopStmt(ASTWhileLoopNode node) {
     return visitChildren(node);
   }
 

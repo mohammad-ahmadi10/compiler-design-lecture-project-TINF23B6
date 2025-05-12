@@ -28,10 +28,10 @@ digraph AST {
  L2C13_ASTAtomicExprNode -> L2C13_ASTLiteralNode;
  L5C5_ASTStmtNode [label="ASTStmtNode"];
  L2C5_ASTStmtLstNode -> L5C5_ASTStmtNode;
- L5C5_ASTWhileLoopStmtNode [label="ASTWhileLoopStmtNode"];
- L5C5_ASTStmtNode -> L5C5_ASTWhileLoopStmtNode;
+ L5C5_ASTWhileLoopNode [label="ASTWhileLoopNode"];
+ L5C5_ASTStmtNode -> L5C5_ASTWhileLoopNode;
  L5C12_ASTTernaryExprNode [label="ASTTernaryExprNode"];
- L5C5_ASTWhileLoopStmtNode -> L5C12_ASTTernaryExprNode;
+ L5C5_ASTWhileLoopNode -> L5C12_ASTTernaryExprNode;
  L5C12_ASTEqualityExprNode [label="ASTEqualityExprNode"];
  L5C12_ASTTernaryExprNode -> L5C12_ASTEqualityExprNode;
  L5C12_ASTAdditiveExprNode [label="ASTAdditiveExprNode"];
@@ -49,7 +49,7 @@ digraph AST {
  L5C17_ASTLiteralNode [label="ASTLiteralNode"];
  L5C17_ASTAtomicExprNode -> L5C17_ASTLiteralNode;
  L6C9_ASTStmtLstNode [label="ASTStmtLstNode"];
- L5C5_ASTWhileLoopStmtNode -> L6C9_ASTStmtLstNode;
+ L5C5_ASTWhileLoopNode -> L6C9_ASTStmtLstNode;
  L6C9_ASTStmtNode [label="ASTStmtNode"];
  L6C9_ASTStmtLstNode -> L6C9_ASTStmtNode;
  L6C9_ASTAssignStmtNode [label="ASTAssignStmtNode"];
@@ -74,10 +74,10 @@ digraph AST {
  L6C17_ASTAtomicExprNode -> L6C17_ASTLiteralNode;
  L10C5_ASTStmtNode [label="ASTStmtNode"];
  L2C5_ASTStmtLstNode -> L10C5_ASTStmtNode;
- L10C5_ASTWhileLoopStmtNode [label="ASTWhileLoopStmtNode"];
- L10C5_ASTStmtNode -> L10C5_ASTWhileLoopStmtNode;
+ L10C5_ASTWhileLoopNode [label="ASTWhileLoopNode"];
+ L10C5_ASTStmtNode -> L10C5_ASTWhileLoopNode;
  L10C11_ASTTernaryExprNode [label="ASTTernaryExprNode"];
- L10C5_ASTWhileLoopStmtNode -> L10C11_ASTTernaryExprNode;
+ L10C5_ASTWhileLoopNode -> L10C11_ASTTernaryExprNode;
  L10C11_ASTEqualityExprNode [label="ASTEqualityExprNode"];
  L10C11_ASTTernaryExprNode -> L10C11_ASTEqualityExprNode;
  L10C11_ASTAdditiveExprNode [label="ASTAdditiveExprNode"];
@@ -95,7 +95,7 @@ digraph AST {
  L10C16_ASTLiteralNode [label="ASTLiteralNode"];
  L10C16_ASTAtomicExprNode -> L10C16_ASTLiteralNode;
  L11C9_ASTStmtLstNode [label="ASTStmtLstNode"];
- L10C5_ASTWhileLoopStmtNode -> L11C9_ASTStmtLstNode;
+ L10C5_ASTWhileLoopNode -> L11C9_ASTStmtLstNode;
  L11C9_ASTStmtNode [label="ASTStmtNode"];
  L11C9_ASTStmtLstNode -> L11C9_ASTStmtNode;
  L11C9_ASTAssignStmtNode [label="ASTAssignStmtNode"];
@@ -116,10 +116,10 @@ digraph AST {
  L11C13_ASTAtomicExprNode -> L11C13_ASTLiteralNode;
  L14C5_ASTStmtNode [label="ASTStmtNode"];
  L2C5_ASTStmtLstNode -> L14C5_ASTStmtNode;
- L14C5_ASTWhileLoopStmtNode [label="ASTWhileLoopStmtNode"];
- L14C5_ASTStmtNode -> L14C5_ASTWhileLoopStmtNode;
+ L14C5_ASTWhileLoopNode [label="ASTWhileLoopNode"];
+ L14C5_ASTStmtNode -> L14C5_ASTWhileLoopNode;
  L14C11_ASTTernaryExprNode [label="ASTTernaryExprNode"];
- L14C5_ASTWhileLoopStmtNode -> L14C11_ASTTernaryExprNode;
+ L14C5_ASTWhileLoopNode -> L14C11_ASTTernaryExprNode;
  L14C11_ASTEqualityExprNode [label="ASTEqualityExprNode"];
  L14C11_ASTTernaryExprNode -> L14C11_ASTEqualityExprNode;
  L14C11_ASTAdditiveExprNode [label="ASTAdditiveExprNode"];
@@ -137,7 +137,7 @@ digraph AST {
  L14C16_ASTLiteralNode [label="ASTLiteralNode"];
  L14C16_ASTAtomicExprNode -> L14C16_ASTLiteralNode;
  L15C9_ASTStmtLstNode [label="ASTStmtLstNode"];
- L14C5_ASTWhileLoopStmtNode -> L15C9_ASTStmtLstNode;
+ L14C5_ASTWhileLoopNode -> L15C9_ASTStmtLstNode;
  L15C9_ASTStmtNode [label="ASTStmtNode"];
  L15C9_ASTStmtLstNode -> L15C9_ASTStmtNode;
  L15C9_ASTAssignStmtNode [label="ASTAssignStmtNode"];

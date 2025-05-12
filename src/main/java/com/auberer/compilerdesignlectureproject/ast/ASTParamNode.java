@@ -22,8 +22,12 @@ public class ASTParamNode extends ASTNode {
     return ASTTypeNode.getSelectionSet();
   }
 
-  public ASTTypeNode getType() { return getChild(ASTTypeNode.class, 0); }
+  public ASTTypeNode getType() {
+    return getChild(ASTTypeNode.class, 0);
+  }
 
-  public ASTAtomicExprNode getAtomicExpr() { return hasAssignStmt ? getChild(ASTAtomicExprNode.class, 0) : null; }
+  public ASTAtomicExprNode getDefaultValue() {
+    return hasAssignStmt ? getChild(ASTAtomicExprNode.class, 0) : null;
+  }
 
 }

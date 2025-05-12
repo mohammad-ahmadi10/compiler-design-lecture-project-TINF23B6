@@ -4,7 +4,6 @@ import com.auberer.compilerdesignlectureproject.lexer.TokenType;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -23,6 +22,11 @@ public class ASTFunctionDefNode extends ASTNode {
     return ASTParamLstNode.getSelectionSet();
   }
 
-  public ASTParamLstNode getParamBranch() {return haveParams ? getChild(ASTParamLstNode.class,0) : null;}
-  public ASTStmtLstNode getStmtBranch() {return getChild(ASTStmtLstNode.class,0);}
+  public ASTParamLstNode getParams() {
+    return haveParams ? getChild(ASTParamLstNode.class, 0) : null;
+  }
+
+  public ASTStmtLstNode getBody() {
+    return getChild(ASTStmtLstNode.class, 0);
+  }
 }

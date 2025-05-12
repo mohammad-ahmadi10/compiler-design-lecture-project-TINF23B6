@@ -6,7 +6,6 @@ import java.util.Set;
 
 public class ASTForLoopNode extends ASTNode {
 
-
   @Override
   public <T> T accept(ASTVisitor<T> visitor) {
     return visitor.visitForLoop(this);
@@ -31,6 +30,4 @@ public class ASTForLoopNode extends ASTNode {
   public ASTStmtLstNode getBody() {
     return getChild(ASTStmtLstNode.class, 0);
   }
-
-
 }

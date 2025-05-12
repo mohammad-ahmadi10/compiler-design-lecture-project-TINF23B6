@@ -14,5 +14,7 @@ public class ASTReturnStmtNode extends ASTNode {
     return Set.of(TokenType.TOK_RET);
   }
 
-  public ASTTernaryExprNode getReturnExpr() { return getChild(ASTTernaryExprNode.class,0);}
+  public ASTTernaryExprNode getReturnExpr() {
+    return getChild(ASTTernaryExprNode.class, 0);
+  }
 }
