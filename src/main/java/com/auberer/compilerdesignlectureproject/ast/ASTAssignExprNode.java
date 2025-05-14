@@ -24,4 +24,8 @@ public class ASTAssignExprNode extends ASTNode {
     selectionSet.addAll(ASTTernaryExprNode.getSelectionSet());
     return selectionSet;
   }
+
+  public ASTTernaryExprNode getRhs() {
+    return getChild(ASTTernaryExprNode.class, 0);
+  }
 }

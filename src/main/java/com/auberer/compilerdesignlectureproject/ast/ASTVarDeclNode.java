@@ -20,4 +20,12 @@ public class ASTVarDeclNode extends ASTNode {
   public static Set<TokenType> getSelectionSet() {
     return ASTTypeNode.getSelectionSet();
   }
+
+  public ASTTypeNode getType() {
+    return getChild(ASTTypeNode.class, 0);
+  }
+
+  public ASTTernaryExprNode getInitExpr() {
+    return getChild(ASTTernaryExprNode.class, 0);
+  }
 }

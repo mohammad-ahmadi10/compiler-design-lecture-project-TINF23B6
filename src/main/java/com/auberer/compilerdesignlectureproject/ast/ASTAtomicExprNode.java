@@ -27,4 +27,20 @@ public class ASTAtomicExprNode extends ASTNode {
     selectionSet.add(TokenType.TOK_LPAREN);
     return selectionSet;
   }
+
+  public ASTLiteralNode getLiteral() {
+    return getChild(ASTLiteralNode.class, 0);
+  }
+
+  public ASTFunctionCallNode getFunctionCall() {
+    return getChild(ASTFunctionCallNode.class, 0);
+  }
+
+  public ASTPrintBuiltinCallNode getPrintBuiltin() {
+    return getChild(ASTPrintBuiltinCallNode.class, 0);
+  }
+
+  public ASTTernaryExprNode getTernaryExpr() {
+    return getChild(ASTTernaryExprNode.class, 0);
+  }
 }
