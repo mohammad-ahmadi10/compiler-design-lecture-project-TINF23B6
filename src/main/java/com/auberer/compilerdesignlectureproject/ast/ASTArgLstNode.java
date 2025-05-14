@@ -8,7 +8,7 @@ import java.util.Set;
 public class ASTArgLstNode extends ASTNode {
   @Override
   public <T> T accept(ASTVisitor<T> visitor) {
-    return visitor.visit(this);
+    return visitor.visitArgLst(this);
   }
 
   public static Set<TokenType> getSelectionSet() {

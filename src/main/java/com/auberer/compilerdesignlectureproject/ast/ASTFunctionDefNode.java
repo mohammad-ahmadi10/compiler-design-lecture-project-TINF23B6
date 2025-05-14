@@ -15,7 +15,7 @@ public class ASTFunctionDefNode extends ASTNode {
 
   @Override
   public <T> T accept(ASTVisitor<T> visitor) {
-    return visitor.visit(this);
+    return visitor.visitFunctionDef(this);
   }
 
   public static Set<TokenType> getSelectionSet() {

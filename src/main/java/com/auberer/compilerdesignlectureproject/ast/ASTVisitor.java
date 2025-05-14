@@ -115,4 +115,24 @@ public class ASTVisitor<T> {
   public T visitReturnStmt(ASTReturnStmtNode node) {
     return visitChildren(node);
   }
+
+  public T visitFunctionDef(ASTFunctionDefNode node) {
+    return visitChildren(node);
+  }
+
+  public T visitFunctionCall(ASTFunctionCallNode node) {
+    return visitChildren(node);
+  }
+
+  public T visitParamLst(ASTParamLstNode node) {
+    return visitChildren(node);
+  }
+
+  public T visitParam(ASTParamNode node) {
+    return visitChildren(node);
+  }
+
+  public T visitArgLst(ASTArgLstNode node) {
+    return visitChildren(node);
+  }
 }

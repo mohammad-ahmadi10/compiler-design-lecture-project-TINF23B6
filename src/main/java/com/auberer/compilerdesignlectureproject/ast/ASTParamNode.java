@@ -15,7 +15,7 @@ public class ASTParamNode extends ASTNode {
 
   @Override
   public <T> T accept(ASTVisitor<T> visitor) {
-    return visitor.visit(this);
+    return visitor.visitParam(this);
   }
 
   public static Set<TokenType> getSelectionSet() {

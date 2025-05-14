@@ -210,6 +210,7 @@ public class Parser implements IParser {
     enterNode(node);
 
     parseType();
+    node.setVariableName(lexer.getToken().getText());
     lexer.expect(TokenType.TOK_IDENTIFIER);
     lexer.expect(TokenType.TOK_ASSIGN);
     parseTernaryExpr();
