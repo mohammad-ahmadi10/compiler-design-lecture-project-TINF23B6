@@ -1,8 +1,8 @@
 package com.auberer.compilerdesignlectureproject.sema;
 
-import com.auberer.compilerdesignlectureproject.ast.*;
-
 import java.util.Stack;
+
+import com.auberer.compilerdesignlectureproject.ast.*;
 
 public class SymbolTableBuilder extends ASTVisitor<Void> {
 
@@ -79,6 +79,31 @@ public class SymbolTableBuilder extends ASTVisitor<Void> {
   // Team 5
 
   // Team 6
+  public Void visitCaseStmt(ASTCaseStmtNode node) {
+    Scope current = currentScope.peek();
+    Scope newScope = current.createChildScope();
+    currentScope.push(newScope);
+
+    visitChildren(node);
+
+    assert currentScope.peek() == newScope;
+    currentScope.pop();
+
+    return null;
+  }
+
+  public Void visitDefaultStmt(ASTDefaultStmtNode node) {
+    Scope current = currentScope.peek();
+    Scope newScope = current.createChildScope();
+    currentScope.push(newScope);
+
+    visitChildren(node);
+
+    assert currentScope.peek() == newScope;
+    currentScope.pop();
+
+    return null;
+  }
 
   // Team 7
 
