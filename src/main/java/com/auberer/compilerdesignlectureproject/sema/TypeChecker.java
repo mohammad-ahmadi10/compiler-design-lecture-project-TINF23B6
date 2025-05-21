@@ -108,7 +108,7 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
       var right = operands.get(1);
       if (!left.getType().is(right.getType().getSuperType()))
         throw new SemaError(node, "Equality expressions must have the same type");
-      return new ExprResult(node.setEvaluatedSymbolType(left.getType()));
+      return new ExprResult(node.setEvaluatedSymbolType(new Type(SuperType.TYPE_BOOL)));
     }
   }
 
