@@ -199,13 +199,19 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
 
   @Override
   public ExprResult visitAssignExpr(ASTAssignExprNode node) {
-    SymbolTableEntry entry = node.getCurrentSymbol();
-    assert entry != null;
+    Type resultType = new Type(SuperType.TYPE_INVALID);
 
-    ExprResult rhs = visit(node.getRhs());
-    if (!entry.getType().is(rhs.getType().getSuperType()))
-      throw new SemaError(node, "Type mismatch in assignment");
+    if (node.isAssignment()) {
+      SymbolTableEntry entry = node.getCurrentSymbol();
+      assert entry != null;
 
-    return new ExprResult(node.setEvaluatedSymbolType(rhs.getType()));
+      ExprResult rhs = visit(node.getRhs());
+      if (!entry.getType().is(rhs.getType().getSuperType()))
+        throw new SemaError(node, "Type mismatch in assignment");
+
+      resultType = rhs.getType();
+    }
+
+    return new ExprResult(node.setEvaluatedSymbolType(resultType));
   }
 }
