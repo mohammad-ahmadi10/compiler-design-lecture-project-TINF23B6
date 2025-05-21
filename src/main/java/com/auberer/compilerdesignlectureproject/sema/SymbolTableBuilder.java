@@ -1,12 +1,8 @@
 package com.auberer.compilerdesignlectureproject.sema;
 
-import java.util.Stack;
-
 import com.auberer.compilerdesignlectureproject.ast.*;
 
-public class SymbolTableBuilder extends ASTVisitor<Void> {
-
-  private Stack<Scope> currentScope = new Stack<>();
+public class SymbolTableBuilder extends ASTSemaVisitor<Void> {
 
   @Override
   public Void visitEntry(ASTEntryNode node) {
@@ -50,6 +46,7 @@ public class SymbolTableBuilder extends ASTVisitor<Void> {
       SymbolTableEntry entry = currentScope.peek().lookupSymbol(variableName, node);
       if (entry == null)
         throw new SemaError(node, "Variable " + variableName + " not declared");
+      node.setCurrentSymbol(entry);
     }
 
     return null;

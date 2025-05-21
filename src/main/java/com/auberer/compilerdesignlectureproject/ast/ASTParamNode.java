@@ -24,7 +24,7 @@ public class ASTParamNode extends ASTNode {
     return ASTTypeNode.getSelectionSet();
   }
 
-  public ASTTypeNode getType() {
+  public ASTTypeNode getDataType() {
     return getChild(ASTTypeNode.class, 0);
   }
 
