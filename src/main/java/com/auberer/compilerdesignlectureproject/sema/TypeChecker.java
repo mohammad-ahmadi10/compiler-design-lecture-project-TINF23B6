@@ -1,24 +1,9 @@
 package com.auberer.compilerdesignlectureproject.sema;
 
-import java.util.List;
-
-import com.auberer.compilerdesignlectureproject.ast.ASTAdditiveExprNode;
-import com.auberer.compilerdesignlectureproject.ast.ASTAssignExprNode;
-import com.auberer.compilerdesignlectureproject.ast.ASTAtomicExprNode;
-import com.auberer.compilerdesignlectureproject.ast.ASTCaseStmtNode;
-import com.auberer.compilerdesignlectureproject.ast.ASTDefaultStmtNode;
-import com.auberer.compilerdesignlectureproject.ast.ASTEntryNode;
-import com.auberer.compilerdesignlectureproject.ast.ASTEqualityExprNode;
-import com.auberer.compilerdesignlectureproject.ast.ASTFunctionCallNode;
-import com.auberer.compilerdesignlectureproject.ast.ASTLiteralNode;
-import com.auberer.compilerdesignlectureproject.ast.ASTMultiplicativeExprNode;
-import com.auberer.compilerdesignlectureproject.ast.ASTPrintBuiltinCallNode;
-import com.auberer.compilerdesignlectureproject.ast.ASTSwitchCaseStmtNode;
-import com.auberer.compilerdesignlectureproject.ast.ASTTernaryExprNode;
-import com.auberer.compilerdesignlectureproject.ast.ASTTypeNode;
-import com.auberer.compilerdesignlectureproject.ast.ASTVarDeclNode;
+import com.auberer.compilerdesignlectureproject.ast.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Typ-Kompatibilität prüfen
