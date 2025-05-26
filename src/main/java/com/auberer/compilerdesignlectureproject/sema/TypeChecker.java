@@ -221,6 +221,18 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
   }
 
   @Override
+  public ExprResult visitAnonymousBlockStmt(ASTAnonymousBlockStmtNode node) {
+    Scope scope = node.getScope();
+    currentScope.push(scope);
+
+    visitChildren(node);
+
+    assert currentScope.peek() == scope;
+    currentScope.pop();
+    return null;
+  }
+
+  @Override
   public ExprResult visitDoWhileLoop(ASTDoWhileLoopNode node) {
     Scope dowhileLoopScope = node.getScope();
     currentScope.push(dowhileLoopScope);
@@ -310,7 +322,6 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
     return null;
   }
 
-
   //INFO: Importent need to be change the evaluation of fct calls without assign
   @Override
   public ExprResult visitFunctionCall(ASTFunctionCallNode node) {
@@ -362,5 +373,5 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
     }
     return null;
   }
-
+  
 }
