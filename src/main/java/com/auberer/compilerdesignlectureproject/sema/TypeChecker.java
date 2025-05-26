@@ -1,6 +1,22 @@
 package com.auberer.compilerdesignlectureproject.sema;
 
-import com.auberer.compilerdesignlectureproject.ast.*;
+import java.util.List;
+
+import com.auberer.compilerdesignlectureproject.ast.ASTAdditiveExprNode;
+import com.auberer.compilerdesignlectureproject.ast.ASTAssignExprNode;
+import com.auberer.compilerdesignlectureproject.ast.ASTAtomicExprNode;
+import com.auberer.compilerdesignlectureproject.ast.ASTCaseStmtNode;
+import com.auberer.compilerdesignlectureproject.ast.ASTDefaultStmtNode;
+import com.auberer.compilerdesignlectureproject.ast.ASTEntryNode;
+import com.auberer.compilerdesignlectureproject.ast.ASTEqualityExprNode;
+import com.auberer.compilerdesignlectureproject.ast.ASTFunctionCallNode;
+import com.auberer.compilerdesignlectureproject.ast.ASTLiteralNode;
+import com.auberer.compilerdesignlectureproject.ast.ASTMultiplicativeExprNode;
+import com.auberer.compilerdesignlectureproject.ast.ASTPrintBuiltinCallNode;
+import com.auberer.compilerdesignlectureproject.ast.ASTSwitchCaseStmtNode;
+import com.auberer.compilerdesignlectureproject.ast.ASTTernaryExprNode;
+import com.auberer.compilerdesignlectureproject.ast.ASTTypeNode;
+import com.auberer.compilerdesignlectureproject.ast.ASTVarDeclNode;
 
 import java.util.ArrayList;
 
@@ -97,6 +113,48 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
       node.setEvaluatedSymbolType(result.getType());
       return result;
     }
+  }
+
+  // Team 6
+  @Override
+  public ExprResult visitSwitchCaseStmt(ASTSwitchCaseStmtNode node) {
+    ExprResult conditionResult = visit(node.getCondition());
+    List<ASTCaseStmtNode> caseBlocks = node.getCaseBlocks();
+
+    for (ASTCaseStmtNode caseBlock : caseBlocks) {
+      caseBlock.setConditionResult(conditionResult);
+      visitCaseStmt(caseBlock);
+    }
+
+    ASTDefaultStmtNode defaultBlock = node.getDefaultBlock();
+    if (defaultBlock != null) {
+      visit(defaultBlock);
+    }
+
+    Type resultType = new Type(SuperType.TYPE_INVALID);
+    return new ExprResult(node.setEvaluatedSymbolType(resultType));
+  }
+
+  @Override
+  public ExprResult visitCaseStmt(ASTCaseStmtNode caseBlock) {
+    Scope scope = caseBlock.getScope();
+    currentScope.push(scope);
+
+    ASTLiteralNode literal = caseBlock.getLiteral();
+    if (literal != null) {
+      ExprResult caseResult = visit(literal);
+      if (!caseResult.getType().is(caseBlock.getConditionResult().getType().getSuperType())) {
+        throw new SemaError(literal, "Case value must be of type " + caseBlock.getConditionResult().getType().getSuperType());
+      }
+    }
+
+    visit(caseBlock.getStmtLst());
+
+    assert currentScope.peek() == scope;
+    currentScope.pop();
+
+    Type resultType = new Type(SuperType.TYPE_INVALID);
+    return new ExprResult(caseBlock.setEvaluatedSymbolType(resultType));
   }
 
   @Override
