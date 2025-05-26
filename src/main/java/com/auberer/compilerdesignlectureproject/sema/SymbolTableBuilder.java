@@ -105,11 +105,11 @@ public class SymbolTableBuilder extends ASTSemaVisitor<Void> {
   @Override
   public Void visitFunctionDef(ASTFunctionDefNode node) {
     String functionName = node.getIdentifier();
-    SymbolTableEntry entry = currentScope.peek().lookupSymbolStrict(functionName,node);
-    if(entry == null) {
+    SymbolTableEntry entry = currentScope.peek().lookupSymbolStrict(functionName, node);
+    if (entry == null) {
       entry = currentScope.peek().insertSymbol(functionName, node);
       node.setCurrentSymbol(entry);
-    }else{
+    } else {
       throw new SemaError(node, "Function " + functionName + " already declared");
     }
     // may create problems due to Type (?)
@@ -127,12 +127,12 @@ public class SymbolTableBuilder extends ASTSemaVisitor<Void> {
   public Void visitParam(ASTParamNode node) {
     visitChildren(node);
     String paramName = node.getIdentifier();
-    SymbolTableEntry entry = currentScope.peek().lookupSymbolStrict(paramName,node);
-    if(entry == null) {
+    SymbolTableEntry entry = currentScope.peek().lookupSymbolStrict(paramName, node);
+    if (entry == null) {
       entry = currentScope.peek().insertSymbol(paramName, node);
       entry.setParam(true);
       node.setCurrentSymbol(entry);
-    }else{
+    } else {
       throw new SemaError(node, "Parameter identifier" + paramName + " already used");
     }
     return null;
@@ -142,14 +142,12 @@ public class SymbolTableBuilder extends ASTSemaVisitor<Void> {
   public Void visitFunctionCall(ASTFunctionCallNode node) {
     visitChildren(node);
     String functionName = node.getIdentifier();
-    SymbolTableEntry entry = rootScope.lookupSymbol(functionName,node);
-    if(entry == null) {
+    SymbolTableEntry entry = rootScope.lookupSymbol(functionName, node);
+    if (entry == null) {
       throw new SemaError(node, "Function " + functionName + " not declared");
     }
     return null;
   }
-
-
 
 
   // Team 5

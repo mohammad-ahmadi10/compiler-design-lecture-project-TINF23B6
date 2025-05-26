@@ -16,7 +16,7 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
 
   final ASTEntryNode entryNode;
 
-  final FunctionTable functionTable = new FunctionTable( );
+  final FunctionTable functionTable = new FunctionTable();
 
   public TypeChecker(ASTEntryNode entryNode) {
     this.entryNode = entryNode;
@@ -335,9 +335,9 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
 
     ExprResult lhs = visit(node.getDataType());
     //ToDo Justus: ugly and doubled rewrite
-    switch (lhs.getType().getSuperType()){
+    switch (lhs.getType().getSuperType()) {
       case SuperType.TYPE_BOOL:
-          functionTable.incBooleanParamCount();
+        functionTable.incBooleanParamCount();
         break;
       case SuperType.TYPE_DOUBLE:
         functionTable.incDoubleParamCount();
@@ -352,13 +352,13 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
 
     entry.setType(lhs.getType());
 
-    if(node.getDefaultValue() != null ){
+    if (node.getDefaultValue() != null) {
       ExprResult rhs = visit(node.getDefaultValue());
-      if(!rhs.getType().is(rhs.getType().getSuperType()))
+      if (!rhs.getType().is(rhs.getType().getSuperType()))
         throw new SemaError(node, "Type mismatch in default Type");
-      else{
+      else {
         //ToDo Justus: ugly and doubled rewrite
-        switch (lhs.getType().getSuperType()){
+        switch (lhs.getType().getSuperType()) {
           case SuperType.TYPE_BOOL:
             functionTable.incrementAmountBooleanParamsDefaults();
             break;
@@ -389,7 +389,7 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
     assert entry != null;
     entry.setType(retType);
 
-    if(node.getParams() != null){
+    if (node.getParams() != null) {
       visitParamLst(node.getParams());
     }
     visit(node.getBody());
@@ -400,7 +400,7 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
   @Override
   public ExprResult visitFunctionCall(ASTFunctionCallNode node) {
     String identifier = node.getIdentifier();
-    Type retType =  functionTable.getTypeByIdentifier(identifier);
+    Type retType = functionTable.getTypeByIdentifier(identifier);
     functionTable.setPointer(functionTable.getPointerByIdentifier(identifier));
     visitChildren(node);
     functionTable.resetPointer();
@@ -417,7 +417,7 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
     int boolArgs = 0;
     for (ASTAtomicExprNode arg : arguments) {
       ExprResult result = visit(arg);
-      switch (result.getType().getSuperType()){
+      switch (result.getType().getSuperType()) {
         case SuperType.TYPE_INT:
           intArgs++;
           break;
@@ -440,10 +440,10 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
   public ExprResult visitReturnStmt(ASTReturnStmtNode node) {
     ExprResult result = visit(node.getReturnExpr());
     SuperType returnType = functionTable.getActiveEntry().getReturnType().getSuperType();
-    if(!result.getType().getSuperType().equals(returnType)){
+    if (!result.getType().getSuperType().equals(returnType)) {
       throw new RuntimeException("Return type mismatch");
     }
     return null;
   }
-  
+
 }
