@@ -246,6 +246,11 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
   }
 
   @Override
+  public ExprResult visitAssignStmt(ASTAssignStmtNode node) {
+    return new ExprResult(node.setEvaluatedSymbolType(new Type(SuperType.TYPE_INVALID)));
+  }
+
+  @Override
   public ExprResult visitAssignExpr(ASTAssignExprNode node) {
     Type resultType = new Type(SuperType.TYPE_INVALID);
 
@@ -261,6 +266,33 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
     }
 
     return new ExprResult(node.setEvaluatedSymbolType(resultType));
+  }
+
+  @Override
+  public ExprResult visitForLoop(ASTForLoopNode node) {
+    ASTVarDeclNode varDeclNode = node.getInitialization();
+    ExprResult varDeclResult = visit(varDeclNode);
+    if (!varDeclResult.getType().is(SuperType.TYPE_INT)) {
+      throw new SemaError(node, "Please initialize an Integer.");
+    }
+
+    ASTTernaryExprNode ternaryExprNode = node.getCondition();
+    ExprResult condResult = visit(ternaryExprNode);
+    if (!condResult.getType().is(SuperType.TYPE_BOOL)) {
+      throw new SemaError(ternaryExprNode, "The loop condition must be of type bool.");
+    }
+
+    ASTAssignExprNode assignExprNode = node.getIncrement();
+    visit(assignExprNode);
+
+    Scope bodyScope = node.getScope();
+    currentScope.push(bodyScope);
+    ASTStmtLstNode stmtLstNode = node.getBody();
+    visit(stmtLstNode);
+    currentScope.pop();
+
+    return new ExprResult(new Type(SuperType.TYPE_INVALID));
+
   }
 
   @Override
