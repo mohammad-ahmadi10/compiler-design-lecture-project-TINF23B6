@@ -268,6 +268,26 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
   }
 
   @Override
+  public ExprResult visitIfStmt(ASTIfStmtNode node) {
+    visitChildren(node);
+
+    ASTTernaryExprNode condition = node.getCondition();
+      if (!condition.getType().is(SuperType.TYPE_BOOL)) {
+        throw new SemaError(node, "If condition must be of type bool");
+    }
+
+      ASTIfBodyNode bodyNode = node.getIfBody();
+      Scope bodyScope = bodyNode.getScope();
+      currentScope.push(bodyScope);
+      visit(bodyNode);
+
+      assert currentScope.peek() == bodyScope;
+      currentScope.pop();
+
+      return null;
+  }
+  
+  @Override
   public ExprResult visitForLoop(ASTForLoopNode node) {
     ASTVarDeclNode varDeclNode = node.getInitialization();
     ExprResult varDeclResult = visit(varDeclNode);
