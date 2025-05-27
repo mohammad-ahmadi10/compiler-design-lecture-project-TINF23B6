@@ -291,7 +291,6 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
     currentScope.pop();
 
     return new ExprResult(new Type(SuperType.TYPE_INVALID));
-
   }
 
   @Override
@@ -314,7 +313,6 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
     Type resultType = new Type(SuperType.TYPE_INVALID);
     return new ExprResult(node.setEvaluatedSymbolType(resultType));
   }
-
 
   @Override
   public ExprResult visitAnonymousBlockStmt(ASTAnonymousBlockStmtNode node) {
@@ -351,7 +349,6 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
 
   @Override
   public ExprResult visitParam(ASTParamNode node) {
-
     SymbolTableEntry entry = node.getCurrentSymbol();
     assert entry != null;
 
@@ -398,7 +395,6 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
     }
 
     return null;
-
   }
 
   @Override
@@ -467,8 +463,5 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
     }
     return null;
   }
-
-
-
 
 }

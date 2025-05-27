@@ -36,7 +36,7 @@ public class CompilerDesignLectureProject {
         .addOption("tokens", "dump-tokens", false, "Dump the lexed tokens")
         .addOption("ast", "dump-ast", false, "Dump the AST as dot file")
         .addOption("symtab", "dump-symbol-table", false, "Dump the symbol table along with the scopes")
-        .addOption("symtyptab", "dump-symbol-table-types", false, "Dump the symbol table along with the scopes and the types");
+        .addOption("types", "dump-typed-symbol-table", false, "Dump the symbol table along with the scopes and the types");
 
     DefaultParser cliParser = new DefaultParser();
     try {
@@ -97,15 +97,15 @@ public class CompilerDesignLectureProject {
       TypeChecker typeChecker = new TypeChecker();
       typeChecker.visitEntry(ast);
 
-      // ToDo(Marc): Implement
-
       // Dump symbol table after type implemented
-      if (cli.hasOption("symtyptab")) {
+      if (cli.hasOption("types")) {
         System.out.println("Dumping scopes with symbol tables with type ...");
         ObjectMapper mapper = new ObjectMapper();
         CustomJSONPrettyPrinter pp = new CustomJSONPrettyPrinter();
         System.out.println(mapper.writer(pp).writeValueAsString(ast.getRootScope()));
       }
+
+      // ToDo(Marc): Implement
 
       System.out.println("Compilation successful!");
     } catch (ParseException e) {
