@@ -1,9 +1,11 @@
 package com.auberer.compilerdesignlectureproject.codegen;
 
 import com.auberer.compilerdesignlectureproject.ast.*;
-import com.auberer.compilerdesignlectureproject.codegen.instructions.Instruction;
+import com.auberer.compilerdesignlectureproject.codegen.instructions.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 public class CodeGenerator extends ASTVisitor<IRExprResult> {
 
@@ -19,32 +21,51 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
 
   @Override
   public IRExprResult visitEntry(ASTEntryNode node) {
-    // ToDo(Marc): Extend
+    // We did not enter a function yet, so the current block has to be null
+    assert currentBlock == null;
+
+    // Visit children
+    visitChildren(node);
+
+    assert currentBlock == null;
     return null;
   }
 
   @Override
   public IRExprResult visitVarDecl(ASTVarDeclNode node) {
-    // ToDo(Marc): Extend
-    return null;
-  }
+    AllocaInstruction allocaInstruction = new AllocaInstruction(node, node.getCurrentSymbol());
+    pushToCurrentBlock(allocaInstruction);
 
-  @Override
-  public IRExprResult visitAssignStmt(ASTAssignStmtNode node) {
-    // ToDo(Marc): Extend
-    return null;
+    visit(node.getInitExpr());
+    StoreInstruction storeInstruction = new StoreInstruction(node.getInitExpr(), node.getCurrentSymbol());
+    pushToCurrentBlock(storeInstruction);
+
+    return new IRExprResult(node.getValue(), node, node.getCurrentSymbol());
   }
 
   @Override
   public IRExprResult visitAssignExpr(ASTAssignExprNode node) {
-    // ToDo(Marc): Extend
-    return null;
+    visit(node.getRhs());
+
+    if (node.isAssignment()) {
+      StoreInstruction storeInstruction = new StoreInstruction(node.getRhs(), node.getCurrentSymbol());
+      pushToCurrentBlock(storeInstruction);
+      return new IRExprResult(node.getCurrentSymbol().getValue(), node, node.getCurrentSymbol());
+    }
+
+    return new IRExprResult(node.getRhs().getValue(), node, null);
   }
 
   @Override
   public IRExprResult visitPrintBuiltin(ASTPrintBuiltinCallNode node) {
-    // ToDo(Marc): Extend
-    return null;
+    // Visit expression to print
+    visit(node.getExpr());
+
+    // Create a print instruction and append it to the current BasicBlock
+    PrintInstruction printInstruction = new PrintInstruction(node);
+    pushToCurrentBlock(printInstruction);
+
+    return new IRExprResult(null, node, null);
   }
 
   // Team 1
@@ -75,20 +96,86 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
 
   @Override
   public IRExprResult visitAdditiveExpr(ASTAdditiveExprNode node) {
-    // ToDo(Marc): Extend
-    return null;
+    List<ASTMultiplicativeExprNode> operandsList = node.getOperands();
+    if (operandsList.size() == 1)
+      return visit(operandsList.getFirst());
+    List<ASTAdditiveExprNode.AdditiveOp> operatorsList = node.getOpList();
+
+    // Visit the first operand
+    visit(operandsList.getFirst());
+
+    for (int i = 1; i < operandsList.size(); i++) {
+      visit(operandsList.get(i));
+      if (operatorsList.get(i - 1) == ASTAdditiveExprNode.AdditiveOp.PLUS) {
+        PlusInstruction plusInstruction = new PlusInstruction(node, operandsList.get(i - 1), operandsList.get(i));
+        pushToCurrentBlock(plusInstruction);
+      } else if (operatorsList.get(i - 1) == ASTAdditiveExprNode.AdditiveOp.MINUS) {
+        MinusInstruction minusInstruction = new MinusInstruction(node, operandsList.get(i - 1), operandsList.get(i));
+        pushToCurrentBlock(minusInstruction);
+      }
+    }
+
+    return new IRExprResult(node.getValue(), node, null);
   }
 
   @Override
   public IRExprResult visitMultiplicativeExpr(ASTMultiplicativeExprNode node) {
-    // ToDo(Marc): Extend
-    return null;
+    List<ASTAtomicExprNode> operandsList = node.getOperands();
+    if (operandsList.size() == 1)
+      return visit(operandsList.getFirst());
+    List<ASTMultiplicativeExprNode.MultiplicativeOp> operatorsList = node.getOpList();
+
+    // Visit the first operand
+    visit(operandsList.getFirst());
+
+    for (int i = 1; i < operandsList.size(); i++) {
+      visit(operandsList.get(i));
+      if (operatorsList.get(i - 1) == ASTMultiplicativeExprNode.MultiplicativeOp.MUL) {
+        MulInstruction multiplicativeInstruction = new MulInstruction(node, operandsList.get(i - 1), operandsList.get(i));
+        pushToCurrentBlock(multiplicativeInstruction);
+      } else if (operatorsList.get(i - 1) == ASTMultiplicativeExprNode.MultiplicativeOp.DIV) {
+        DivInstruction divisionInstruction = new DivInstruction(node, operandsList.get(i - 1), operandsList.get(i));
+        pushToCurrentBlock(divisionInstruction);
+      }
+    }
+
+    return new IRExprResult(node.getValue(), node, null);
   }
 
   @Override
   public IRExprResult visitAtomicExpr(ASTAtomicExprNode node) {
-    // ToDo(Marc): Extend
-    return null;
+    if (node.getCurrentSymbol() != null) {
+      LoadInstruction loadInstruction = new LoadInstruction(node, node.getCurrentSymbol());
+      pushToCurrentBlock(loadInstruction);
+      return new IRExprResult(node.getCurrentSymbol().getValue(), node, node.getCurrentSymbol());
+    }
+
+    if (node.getFunctionCall() != null) {
+      IRExprResult result = visit(node.getFunctionCall());
+      node.setValue(result.getValue());
+      return new IRExprResult(node.getFunctionCall().getValue(), node, null);
+    }
+
+    if (node.getPrintBuiltin() != null) {
+      IRExprResult result = visit(node.getPrintBuiltin());
+      node.setValue(result.getValue());
+      return new IRExprResult(node.getPrintBuiltin().getValue(), node, null);
+    }
+
+    if (node.getTernaryExpr() != null) {
+      IRExprResult result = visit(node.getTernaryExpr());
+      node.setValue(result.getValue());
+      return new IRExprResult(node.getTernaryExpr().getValue(), node, null);
+    }
+
+    if (node.getLiteral() != null) {
+      IRExprResult result = visit(node.getLiteral());
+      node.setValue(result.getValue());
+      return new IRExprResult(node.getLiteral().getValue(), node, null);
+    }
+
+    assert false : "Unexpected AST node type";
+    return new IRExprResult(null, node, null);
   }
 
   /**
