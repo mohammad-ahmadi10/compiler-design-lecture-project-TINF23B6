@@ -32,6 +32,7 @@ public class SymbolTableEntry {
   private Type type = new Type(SuperType.TYPE_INVALID);
 
   @Setter
+  @JsonIgnore
   private Value value = null;
 
   public SymbolTableEntry(String name, ASTNode declNode, Scope scope) {
