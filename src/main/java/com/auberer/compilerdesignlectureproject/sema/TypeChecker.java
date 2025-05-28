@@ -387,6 +387,8 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
       case SuperType.TYPE_STRING:
         functionTable.incStringParamCount();
         break;
+      default:
+        break;
     }
 
     entry.setType(lhs.getType());
@@ -409,6 +411,8 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
             break;
           case SuperType.TYPE_STRING:
             functionTable.incrementAmountStringParamsDefaults();
+            break;
+          default:
             break;
         }
       }
@@ -467,6 +471,8 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
           break;
         case SuperType.TYPE_BOOL:
           boolArgs++;
+          break;
+        default:
           break;
       }
     }
