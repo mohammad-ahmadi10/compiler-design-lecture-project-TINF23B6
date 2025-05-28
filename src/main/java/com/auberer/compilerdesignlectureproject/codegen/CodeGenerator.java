@@ -9,6 +9,7 @@ import java.util.List;
 
 public class CodeGenerator extends ASTVisitor<IRExprResult> {
 
+  @Getter
   private final Module module; // IR module, which represents the whole program
 
   @Getter
