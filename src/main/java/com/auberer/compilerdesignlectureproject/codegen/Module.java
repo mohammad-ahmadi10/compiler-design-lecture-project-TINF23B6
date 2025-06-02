@@ -38,5 +38,6 @@ public class Module implements IDumpable {
       sb.append("\n\n");
       function.dumpIR(sb);
     }
+    sb.append("\n");
   }
 }

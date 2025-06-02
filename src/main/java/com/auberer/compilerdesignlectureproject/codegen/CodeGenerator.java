@@ -1,15 +1,14 @@
 package com.auberer.compilerdesignlectureproject.codegen;
 
-import java.util.ArrayList;
-import java.util.List;
-import com.auberer.compilerdesignlectureproject.sema.Type;
-
 import com.auberer.compilerdesignlectureproject.ast.*;
 import com.auberer.compilerdesignlectureproject.codegen.instructions.*;
 import com.auberer.compilerdesignlectureproject.interpreter.Value;
-
+import com.auberer.compilerdesignlectureproject.sema.Type;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CodeGenerator extends ASTVisitor<IRExprResult> {
 
@@ -38,7 +37,7 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
 
   @Override
   public IRExprResult visitVarDecl(ASTVarDeclNode node) {
-    AllocaInstruction allocaInstruction = new AllocaInstruction(node, node.getCurrentSymbol());
+    AllocaInstruction allocaInstruction = new AllocaInstruction(node, node.getCurrentSymbol(), node.getVariableName());
     pushToCurrentBlock(allocaInstruction);
 
     visit(node.getInitExpr());
@@ -197,7 +196,7 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
       paramList = node.getParams().getParams().stream().map(param -> new Function.Parameter(param.getIdentifier(), param.getDataType().getType())).toList();
     }
 
-    Function newFunction = new Function(node.getIdentifier(), paramList);
+    Function newFunction = new Function(node.getIdentifier(), node.getReturnType().getType(), paramList);
     BasicBlock entryBlock = new BasicBlock(newFunction.getName());
     module.addFunction(newFunction);
     currentBlock = entryBlock;
