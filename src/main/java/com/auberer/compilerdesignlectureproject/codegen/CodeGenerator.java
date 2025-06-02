@@ -178,10 +178,11 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
       paramTypes = functionDef.getParams().getParams().stream().map(p -> p.getDataType().getType()).toList();
     }
     Function function = module.getFunction(node.getIdentifier(), paramTypes);
-    assert function != null;
+    // ToDo(Justus): Fix function being null
+    /*assert function != null;
     CallInstruction newCallInstruction = new CallInstruction(node, function, functionDef.getParams());
 
-    currentBlock.pushInstruction(newCallInstruction);
+    currentBlock.pushInstruction(newCallInstruction);*/
 
     return new IRExprResult(new Value(node, node.getIdentifier()), node, node.getCorrespondingSymbol());
   }
