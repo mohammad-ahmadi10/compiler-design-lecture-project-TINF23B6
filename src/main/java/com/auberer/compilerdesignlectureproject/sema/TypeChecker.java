@@ -247,6 +247,7 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
 
   @Override
   public ExprResult visitAssignStmt(ASTAssignStmtNode node) {
+    visitChildren(node);
     return new ExprResult(node.setEvaluatedSymbolType(new Type(SuperType.TYPE_INVALID)));
   }
 

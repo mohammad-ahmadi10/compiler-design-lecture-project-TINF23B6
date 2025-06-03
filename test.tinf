@@ -1,9 +1,9 @@
-int hanoi := (int steps; string from = "A"; string aux= "B"; string to= "C") {
-    int res = call hanoi(steps; from; to; aux);
+int main := () {
+  int i = 3;
+  while (i != 24) {
+    i = i * 2;
+    int a = i + 1;
+  }
 
-    ret 0;
-}
-
-int main :=() {
-    int res = call hanoi(3);
+  ret i;
 }

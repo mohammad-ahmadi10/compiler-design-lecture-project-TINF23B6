@@ -209,9 +209,9 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
 
   @Override
   public IRExprResult visitReturnStmt(ASTReturnStmtNode node) {
+    visit(node.getReturnExpr());
     ReturnInstruction newReturnInstruction = new ReturnInstruction(node);
     pushToCurrentBlock(newReturnInstruction);
-    visit(node.getReturnExpr());
     return null;
   }
 

@@ -20,9 +20,9 @@ public class CondJumpInstruction extends Instruction {
 
   @Override
   public void dumpIR(StringBuilder sb) {
-    sb.append("condjump ").append(condition.getValue().getName()).append(" ? ")
-        .append(trueTargetBlock.getLabel()).append(" : ")
-        .append(falseTargetBlock.getLabel());
+    sb.append("br i1 ").append(condition.getValue().getName())
+        .append(", label %").append(trueTargetBlock.getLabel())
+        .append(", label %").append(falseTargetBlock.getLabel());
   }
 
   @Override

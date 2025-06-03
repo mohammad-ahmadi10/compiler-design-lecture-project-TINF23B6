@@ -40,5 +40,12 @@ public class Function implements IDumpable {
     sb.append("}");
   }
 
+  public void verify() {
+    if (entryBlock == null)
+      throw new IllegalStateException("Function " + name + " has no entry block");
+    List<BasicBlock> verifiedBlocks = new ArrayList<>();
+    entryBlock.verify(verifiedBlocks);
+  }
+
   public record Parameter(String name, Type type) {}
 }

@@ -18,9 +18,11 @@ public class SelectInstruction extends Instruction {
 
   @Override
   public void dumpIR(StringBuilder sb) {
-    sb.append("select ")
+    sb.append(node.getValue().getName()).append(" = select i1 ")
         .append(condition.getValue().getName()).append(", ")
+        .append(trueValue.getType().toLLVMIRTypeString()).append(" ")
         .append(trueValue.getValue().getName()).append(", ")
+        .append(falseValue.getType().toLLVMIRTypeString()).append(" ")
         .append(falseValue.getValue().getName());
   }
 

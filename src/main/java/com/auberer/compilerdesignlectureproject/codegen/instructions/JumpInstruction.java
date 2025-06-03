@@ -16,7 +16,7 @@ public class JumpInstruction extends Instruction {
 
   @Override
   public void dumpIR(StringBuilder sb) {
-    sb.append("jump ").append(targetBlock.getLabel());
+    sb.append("br label %").append(targetBlock.getLabel());
   }
 
   @Override

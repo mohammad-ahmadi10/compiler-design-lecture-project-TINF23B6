@@ -40,4 +40,9 @@ public class Module implements IDumpable {
     }
     sb.append("\n");
   }
+
+  public void verify() {
+    for (Function function : functions)
+      function.verify();
+  }
 }
