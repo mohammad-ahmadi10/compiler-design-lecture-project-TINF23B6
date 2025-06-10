@@ -47,7 +47,7 @@ public class BasicBlock implements IDumpable {
 
     // Dump the IR of this block
     dumpIR(sb);
-    
+
     // Dump the IR of the successor blocks
     for (BasicBlock successor : getSuccessors())
       successor.dumpIR(sb, alreadyDumpedBlocks);
