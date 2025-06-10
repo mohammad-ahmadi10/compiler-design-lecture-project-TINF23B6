@@ -170,12 +170,16 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
   @Override
   public IRExprResult visitDoWhileLoop(ASTDoWhileLoopNode node) {
     BasicBlock bodyBlock = new BasicBlock("do_while_body");
+    BasicBlock condBlock = new BasicBlock("do_while_cond");
     BasicBlock endBlock = new BasicBlock("do_while_end");
 
     insertJump(node, bodyBlock);
 
     switchToBlock(bodyBlock);
     visit(node.getBody());
+    insertJump(node, condBlock);
+
+    switchToBlock(condBlock);
     visit(node.getCondition());
     insertCondJump(node, node.getCondition(), bodyBlock, endBlock);
 
