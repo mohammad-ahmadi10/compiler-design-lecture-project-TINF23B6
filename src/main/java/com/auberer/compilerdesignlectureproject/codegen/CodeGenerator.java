@@ -206,9 +206,8 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
   @Override
   public IRExprResult visitFunctionDef(ASTFunctionDefNode node) {
     List<Function.Parameter> paramList = new ArrayList<>();
-
     if (node.getParams() != null) {
-      paramList = node.getParams().getParams().stream().map(param -> new Function.Parameter(param.getIdentifier(), param.getDataType().getType())).toList();
+      paramList = node.getParams().getParams().stream().map(param -> new Function.Parameter(param.getParamName(), param.getDataType().getType())).toList();
     }
 
     Function newFunction = new Function(node.getIdentifier(), node.getReturnType().getType(), paramList);
@@ -216,10 +215,29 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
     module.addFunction(newFunction);
     currentBlock = entryBlock;
     newFunction.setEntryBlock(currentBlock);
+
+    if (node.getParams() != null) {
+      visit(node.getParams());
+    }
+
     visit(node.getBody());
 
     finalizeFunction();
     return null;
+  }
+
+  @Override
+  public IRExprResult visitParam(ASTParamNode node) {
+    AllocaInstruction allocaInstruction = new AllocaInstruction(node, node.getCurrentSymbol(), node.getParamName());
+    pushToCurrentBlock(allocaInstruction);
+
+    if (node.getDefaultValue() != null) {
+      visit(node.getDefaultValue());
+      StoreInstruction storeInstruction = new StoreInstruction(node.getDefaultValue(), node.getCurrentSymbol());
+      pushToCurrentBlock(storeInstruction);
+    }
+
+    return new IRExprResult(node.getValue(), node, node.getCurrentSymbol());
   }
 
   @Override

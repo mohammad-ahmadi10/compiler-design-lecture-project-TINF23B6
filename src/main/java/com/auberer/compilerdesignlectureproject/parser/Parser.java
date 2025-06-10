@@ -121,7 +121,7 @@ public class Parser implements IParser {
     parseType();
     Token token = lexer.getToken();
     if (token.getType().equals(TokenType.TOK_IDENTIFIER)) {
-      node.setIdentifier(token.getText());
+      node.setParamName(token.getText());
     } else {
       throw new RuntimeException("Unexpected token type: " + token.getType());
     }

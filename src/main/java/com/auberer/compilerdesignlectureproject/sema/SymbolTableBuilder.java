@@ -128,7 +128,7 @@ public class SymbolTableBuilder extends ASTSemaVisitor<Void> {
   @Override
   public Void visitParam(ASTParamNode node) {
     visitChildren(node);
-    String paramName = node.getIdentifier();
+    String paramName = node.getParamName();
     SymbolTableEntry entry = currentScope.peek().lookupSymbolStrict(paramName, node);
     if (entry == null) {
       entry = currentScope.peek().insertSymbol(paramName, node);
