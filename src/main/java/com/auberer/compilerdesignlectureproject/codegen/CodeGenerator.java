@@ -209,8 +209,8 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
     currentBlock = entryBlock;
     newFunction.setEntryBlock(currentBlock);
     visit(node.getBody());
-    currentBlock = null;
 
+    finalizeFunction();
     return null;
   }
 

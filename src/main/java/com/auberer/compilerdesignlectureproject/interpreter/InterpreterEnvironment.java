@@ -15,6 +15,7 @@ public class InterpreterEnvironment {
   @Setter
   @Getter
   private ListIterator<Instruction> instructionIterator;
+  private final Stack<ListIterator<Instruction>> callStack = new Stack<>();
 
   public InterpreterEnvironment(Module module, boolean doTracing) {
     this.module = module;
@@ -24,7 +25,5 @@ public class InterpreterEnvironment {
   public void interpret() {
     // ToDo(Marc): Implement
   }
-
-  private final Stack<ListIterator<Instruction>> callStack = new Stack<>();
 
 }
