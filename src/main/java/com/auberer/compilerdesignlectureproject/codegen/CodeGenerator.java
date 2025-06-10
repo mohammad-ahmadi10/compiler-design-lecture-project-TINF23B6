@@ -36,6 +36,20 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
   }
 
   @Override
+  public IRExprResult visitStmtLst(ASTStmtLstNode node) {
+    List<ASTStmtNode> statements = node.getStmts();
+    for (ASTStmtNode stmt : statements) {
+      // Visit the next statement
+      visit(stmt);
+
+      // If the block is already terminated, do not visit dead code
+      if (isBlockTerminated(currentBlock))
+        break;
+    }
+    return null;
+  }
+
+  @Override
   public IRExprResult visitVarDecl(ASTVarDeclNode node) {
     AllocaInstruction allocaInstruction = new AllocaInstruction(node, node.getCurrentSymbol(), node.getVariableName());
     pushToCurrentBlock(allocaInstruction);
@@ -504,7 +518,6 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
    */
   private void finalizeFunction() {
     assert currentBlock != null;
-    assert isBlockTerminated(currentBlock);
     currentBlock = null;
   }
 

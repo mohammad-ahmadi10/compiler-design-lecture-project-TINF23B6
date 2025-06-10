@@ -1,28 +1,16 @@
+int lorem := (int r; double l; int ipsum = 2) {
+    int a = 3;
+    a = r;
+    ret a;
+}
+
+int dolor :=(int ipsum = 3) {
+    ipsum = 4;
+    ret 0;
+}
+
 int main := () {
-  int x = 2;
-  int y = 3;
-
-  switch (x) {
-    case 1:
-      int scopedVar = 10;
-      print(scopedVar);
-    case 2:
-      int scopedVar = 20;
-      print(scopedVar);
-    case 5:
-      print("x is a greeting");
-    default:
-      print("x is something else");
-  }
-
-  switch (y) {
-    case 3:
-      int scopedVar = 30;
-      print(scopedVar);
-    default:
-      int scopedVar = 100;
-      print(scopedVar);
-  }
-
-  ret 0;
+    int a = 2;
+    int r = call lorem(a; 2.0; 3);
+    ret 0;
 }
