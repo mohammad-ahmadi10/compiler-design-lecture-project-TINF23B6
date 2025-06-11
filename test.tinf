@@ -1,4 +1,4 @@
 int main := () {
-    print("Hello World!");
-    ret 0;
+
+    ret 1;
 }

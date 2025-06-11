@@ -27,9 +27,12 @@ public class CallInstruction extends Instruction {
     else
       sb.append("call void @");
     sb.append(function.getName());
-    String params = paramListNode.getParams().stream()
-        .map(astLogicalExprNode -> astLogicalExprNode.getValue().getName())
-        .collect(Collectors.joining(","));
+    String params = "";
+    if (paramListNode != null) {
+      params = paramListNode.getParams().stream()
+          .map(astLogicalExprNode -> astLogicalExprNode.getValue().getName())
+          .collect(Collectors.joining(","));
+    }
     sb.append("(").append(params).append(")");
   }
 
