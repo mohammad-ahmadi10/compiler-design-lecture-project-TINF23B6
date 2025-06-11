@@ -4,6 +4,8 @@ import com.auberer.compilerdesignlectureproject.ast.ASTCaseStmtNode;
 import com.auberer.compilerdesignlectureproject.ast.ASTSwitchCaseStmtNode;
 import com.auberer.compilerdesignlectureproject.ast.ASTTernaryExprNode;
 import com.auberer.compilerdesignlectureproject.codegen.BasicBlock;
+import com.auberer.compilerdesignlectureproject.interpreter.InterpreterEnvironment;
+import com.auberer.compilerdesignlectureproject.interpreter.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,21 @@ public class SwitchInstruction extends Instruction {
   @Override
   public void trace(StringBuilder sb) {
     sb.append(node.getCodeLoc().toString()).append(": switch ");
+  }
+
+  @Override
+  public void run(InterpreterEnvironment env) {
+    Value conditionValue = condition.getValue();
+    for (int i = 0; i < cases.size(); i++) {
+      ASTCaseStmtNode caseNode = cases.get(i);
+      BasicBlock caseBlock = caseBlocks.get(i);
+      Value caseValue = caseNode.getValue();
+      if (conditionValue.toString().equals(caseValue.toString())) {
+        env.setInstructionIterator(caseBlock.getInstructions().listIterator());
+        return;
+      }
+    }
+    env.setInstructionIterator(defaultOrEndBlock.getInstructions().listIterator());
   }
 
   @Override

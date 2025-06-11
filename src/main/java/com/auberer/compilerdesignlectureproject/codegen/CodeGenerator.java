@@ -340,7 +340,7 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
     BasicBlock exitBlock = new BasicBlock("ternary_exit");
 
     ASTEqualityExprNode condition = node.getCondition();
-    visit(condition);
+    IRExprResult result = visit(condition);
 
     if (node.isExpanded()) {
       insertCondJump(node, condition, trueBlock, falseBlock);
@@ -358,6 +358,8 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
       switchToBlock(exitBlock);
       SelectInstruction selectInstruction = new SelectInstruction(node, condition, trueBranch, falseBranch);
       pushToCurrentBlock(selectInstruction);
+    } else {
+      node.setValue(result.getValue());
     }
 
     return new IRExprResult(node.getValue(), node, null);
@@ -366,7 +368,7 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
   @Override
   public IRExprResult visitEqualityExpr(ASTEqualityExprNode node) {
     List<ASTAdditiveExprNode> operands = node.getOperands();
-    visit(operands.getFirst());
+    IRExprResult result = visit(operands.getFirst());
     if (operands.size() == 2) {
       visit(operands.getLast());
       if (node.getOp() == ASTEqualityExprNode.EqualityOp.EQ) {
@@ -378,16 +380,20 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
       } else {
         assert false : "Unexpected equality operator";
       }
+    } else {
+      node.setValue(result.getValue());
     }
-
     return new IRExprResult(node.getValue(), node, null);
   }
 
   @Override
   public IRExprResult visitAdditiveExpr(ASTAdditiveExprNode node) {
     List<ASTMultiplicativeExprNode> operandsList = node.getOperands();
-    if (operandsList.size() == 1)
-      return visit(operandsList.getFirst());
+    if (operandsList.size() == 1) {
+      IRExprResult result = visit(operandsList.getFirst());
+      node.setValue(result.getValue());
+      return result;
+    }
     List<ASTAdditiveExprNode.AdditiveOp> operatorsList = node.getOpList();
 
     // Visit the first operand
@@ -412,8 +418,11 @@ public class CodeGenerator extends ASTVisitor<IRExprResult> {
   @Override
   public IRExprResult visitMultiplicativeExpr(ASTMultiplicativeExprNode node) {
     List<ASTAtomicExprNode> operandsList = node.getOperands();
-    if (operandsList.size() == 1)
-      return visit(operandsList.getFirst());
+    if (operandsList.size() == 1) {
+      IRExprResult result = visit(operandsList.getFirst());
+      node.setValue(result.getValue());
+      return result;
+    }
     List<ASTMultiplicativeExprNode.MultiplicativeOp> operatorsList = node.getOpList();
 
     // Visit the first operand

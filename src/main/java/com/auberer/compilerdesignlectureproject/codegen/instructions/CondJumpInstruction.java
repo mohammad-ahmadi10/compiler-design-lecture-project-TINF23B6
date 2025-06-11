@@ -2,6 +2,7 @@ package com.auberer.compilerdesignlectureproject.codegen.instructions;
 
 import com.auberer.compilerdesignlectureproject.ast.ASTNode;
 import com.auberer.compilerdesignlectureproject.codegen.BasicBlock;
+import com.auberer.compilerdesignlectureproject.interpreter.InterpreterEnvironment;
 import lombok.Getter;
 
 @Getter
@@ -28,6 +29,16 @@ public class CondJumpInstruction extends Instruction {
   @Override
   public void trace(StringBuilder sb) {
     sb.append(node.getCodeLoc().toString()).append(": cond jump");
+  }
+
+  @Override
+  public void run(InterpreterEnvironment env) {
+    assert condition.getValue().isBoolValue();
+    if (condition.getValue().isTrue()) {
+      env.setInstructionIterator(trueTargetBlock.getInstructions().listIterator());
+    } else {
+      env.setInstructionIterator(falseTargetBlock.getInstructions().listIterator());
+    }
   }
 
   @Override

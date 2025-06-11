@@ -3,6 +3,7 @@ package com.auberer.compilerdesignlectureproject.codegen.instructions;
 import com.auberer.compilerdesignlectureproject.ast.ASTNode;
 import com.auberer.compilerdesignlectureproject.ast.ASTParamLstNode;
 import com.auberer.compilerdesignlectureproject.codegen.Function;
+import com.auberer.compilerdesignlectureproject.interpreter.InterpreterEnvironment;
 import com.auberer.compilerdesignlectureproject.sema.Type;
 
 import java.util.stream.Collectors;
@@ -35,5 +36,10 @@ public class CallInstruction extends Instruction {
   @Override
   public void trace(StringBuilder sb) {
     sb.append(node.getCodeLoc().toString()).append(": call ");
+  }
+
+  @Override
+  public void run(InterpreterEnvironment env) {
+    env.callFunction(env.getInstructionIterator(), function);
   }
 }
