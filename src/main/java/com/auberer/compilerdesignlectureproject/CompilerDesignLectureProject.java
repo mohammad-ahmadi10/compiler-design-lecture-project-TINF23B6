@@ -5,6 +5,9 @@ import com.auberer.compilerdesignlectureproject.antlr.gen.TInfLexer;
 import com.auberer.compilerdesignlectureproject.antlr.gen.TInfParser;
 import com.auberer.compilerdesignlectureproject.ast.ASTEntryNode;
 import com.auberer.compilerdesignlectureproject.ast.ASTVisualizer;
+import com.auberer.compilerdesignlectureproject.codegen.CodeGenerator;
+import com.auberer.compilerdesignlectureproject.codegen.Module;
+import com.auberer.compilerdesignlectureproject.interpreter.InterpreterEnvironment;
 import com.auberer.compilerdesignlectureproject.lexer.Lexer;
 import com.auberer.compilerdesignlectureproject.parser.Parser;
 import com.auberer.compilerdesignlectureproject.reader.Reader;
@@ -37,7 +40,9 @@ public class CompilerDesignLectureProject {
         .addOption("ast", "dump-ast", false, "Dump the AST as dot file")
         .addOption("symtab", "dump-symbol-table", false, "Dump the symbol table along with the scopes")
         .addOption("types", "dump-typed-symbol-table", false, "Dump the symbol table along with the scopes and the types")
-        .addOption("ir", "dump-ir", false, "Dump the intermediate representation");
+        .addOption("ir", "dump-ir", false, "Dump the intermediate representation")
+        .addOption(null, "disable-verifier", false, "Disable the IR verifier")
+        .addOption("t", "trace", false, "Enables tracing while interpreting the generated IR");
 
     DefaultParser cliParser = new DefaultParser();
     try {
@@ -107,7 +112,7 @@ public class CompilerDesignLectureProject {
       }
 
       // Generate IR
-      /*String moduleName = path.getFileName().toString();
+      String moduleName = path.getFileName().toString();
       CodeGenerator codeGenerator = new CodeGenerator(moduleName);
       codeGenerator.visit(ast);
       Module irModule = codeGenerator.getModule();
@@ -118,9 +123,17 @@ public class CompilerDesignLectureProject {
         StringBuilder sb = new StringBuilder();
         irModule.dumpIR(sb);
         System.out.println(sb);
-      }*/
+      }
 
-      // ToDo(Marc): Implement
+      // Verify IR
+      if (!cli.hasOption("disable-verifier")) {
+        irModule.verify();
+      }
+
+      // Interpret
+      boolean doTracing = cli.hasOption("trace");
+      InterpreterEnvironment environment = new InterpreterEnvironment(irModule, doTracing);
+      environment.interpret();
 
       System.out.println("Compilation successful!");
     } catch (ParseException e) {

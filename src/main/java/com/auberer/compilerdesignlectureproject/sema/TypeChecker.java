@@ -3,6 +3,7 @@ package com.auberer.compilerdesignlectureproject.sema;
 import com.auberer.compilerdesignlectureproject.ast.*;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 
 /**
@@ -103,11 +104,11 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
   @Override
   public ExprResult visitSwitchCaseStmt(ASTSwitchCaseStmtNode node) {
     ExprResult conditionResult = visit(node.getCondition());
-    List<ASTCaseStmtNode> caseBlocks = node.getCaseBlocks();
 
+    List<ASTCaseStmtNode> caseBlocks = node.getCaseBlocks();
     for (ASTCaseStmtNode caseBlock : caseBlocks) {
       caseBlock.setConditionResult(conditionResult);
-      visitCaseStmt(caseBlock);
+      visit(caseBlock);
     }
 
     ASTDefaultStmtNode defaultBlock = node.getDefaultBlock();
@@ -125,12 +126,9 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
     currentScope.push(scope);
 
     ASTLiteralNode literal = caseBlock.getLiteral();
-    if (literal != null) {
-      ExprResult caseResult = visit(literal);
-      if (!caseResult.getType().is(caseBlock.getConditionResult().getType().getSuperType())) {
-        throw new SemaError(literal, "Case value must be of type " + caseBlock.getConditionResult().getType().getSuperType());
-      }
-    }
+    ExprResult caseResult = visit(literal);
+    if (!caseResult.getType().is(caseBlock.getConditionResult().getType().getSuperType()))
+      throw new SemaError(literal, "Case value must be of type " + caseBlock.getConditionResult().getType().getSuperType());
 
     visit(caseBlock.getStmtLst());
 
@@ -246,25 +244,22 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
 
   @Override
   public ExprResult visitAssignStmt(ASTAssignStmtNode node) {
+    visitChildren(node);
     return new ExprResult(node.setEvaluatedSymbolType(new Type(SuperType.TYPE_INVALID)));
   }
 
   @Override
   public ExprResult visitAssignExpr(ASTAssignExprNode node) {
-    Type resultType = new Type(SuperType.TYPE_INVALID);
-
+    ExprResult rhs = visit(node.getRhs());
     if (node.isAssignment()) {
       SymbolTableEntry entry = node.getCurrentSymbol();
       assert entry != null;
 
-      ExprResult rhs = visit(node.getRhs());
       if (!entry.getType().is(rhs.getType().getSuperType()))
         throw new SemaError(node, "Type mismatch in assignment");
-
-      resultType = rhs.getType();
     }
 
-    return new ExprResult(node.setEvaluatedSymbolType(resultType));
+    return new ExprResult(node.setEvaluatedSymbolType(rhs.getType()));
   }
 
   @Override
@@ -363,7 +358,6 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
     if (!exprResult.getType().is(SuperType.TYPE_BOOL)) {
       throw new SemaError(node, "Wrong type: " + exprResult.getType().toString() + ". Type must be bool");
     }
-
     Type resultType = new Type(SuperType.TYPE_INVALID);
     return new ExprResult(node.setEvaluatedSymbolType(resultType));
   }
@@ -374,23 +368,8 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
     assert entry != null;
 
     ExprResult lhs = visit(node.getDataType());
-    //ToDo Justus: ugly and doubled rewrite
-    switch (lhs.getType().getSuperType()) {
-      case SuperType.TYPE_BOOL:
-        functionTable.incBooleanParamCount();
-        break;
-      case SuperType.TYPE_DOUBLE:
-        functionTable.incDoubleParamCount();
-        break;
-      case SuperType.TYPE_INT:
-        functionTable.incIntParamCount();
-        break;
-      case SuperType.TYPE_STRING:
-        functionTable.incStringParamCount();
-        break;
-      default:
-        break;
-    }
+
+    functionTable.incrementParamCount(lhs.getType().getSuperType());
 
     entry.setType(lhs.getType());
 
@@ -399,26 +378,9 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
       if (!rhs.getType().is(rhs.getType().getSuperType()))
         throw new SemaError(node, "Type mismatch in default Type");
       else {
-        //ToDo Justus: ugly and doubled rewrite
-        switch (lhs.getType().getSuperType()) {
-          case SuperType.TYPE_BOOL:
-            functionTable.incrementAmountBooleanParamsDefaults();
-            break;
-          case SuperType.TYPE_DOUBLE:
-            functionTable.incrementAmountDoubleParamsDefaults();
-            break;
-          case SuperType.TYPE_INT:
-            functionTable.incrementAmountIntParamsDefaults();
-            break;
-          case SuperType.TYPE_STRING:
-            functionTable.incrementAmountStringParamsDefaults();
-            break;
-          default:
-            break;
-        }
+        functionTable.incrementParamsDefaults(rhs.getType().getSuperType());
       }
     }
-
     return null;
   }
 
@@ -439,7 +401,6 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
     return null;
   }
 
-  //INFO: Importent need to be change the evaluation of fct calls without assign
   @Override
   public ExprResult visitFunctionCall(ASTFunctionCallNode node) {
     String identifier = node.getIdentifier();
@@ -453,31 +414,12 @@ public class TypeChecker extends ASTSemaVisitor<ExprResult> {
   @Override
   public ExprResult visitArgLst(ASTArgLstNode node) {
     ArrayList<ASTAtomicExprNode> arguments = node.getArgs();
-    //ToDo Justus: search for more effective method
-    int intArgs = 0;
-    int doubleArgs = 0;
-    int stringArgs = 0;
-    int boolArgs = 0;
+    EnumMap<SuperType, Integer> providedArgs= new EnumMap<>(SuperType.class);
     for (ASTAtomicExprNode arg : arguments) {
       ExprResult result = visit(arg);
-      switch (result.getType().getSuperType()) {
-        case SuperType.TYPE_INT:
-          intArgs++;
-          break;
-        case SuperType.TYPE_DOUBLE:
-          doubleArgs++;
-          break;
-        case SuperType.TYPE_STRING:
-          stringArgs++;
-          break;
-        case SuperType.TYPE_BOOL:
-          boolArgs++;
-          break;
-        default:
-          break;
-      }
+      providedArgs.merge(result.getType().getSuperType(), 1, Integer::sum);
     }
-    functionTable.getActiveEntry().validateArgs(intArgs, doubleArgs, stringArgs, boolArgs);
+    functionTable.getActiveEntry().validateArgs(providedArgs);
     return null;
   }
 

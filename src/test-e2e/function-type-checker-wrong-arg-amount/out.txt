@@ -1,5 +1,5 @@
 Compiling with own parser...
-[main] java.lang.RuntimeException: Other Amount of Arguments Expected STRING
+[main] java.lang.RuntimeException: wrong number of argument Type provided: TYPE_STRING
 	at com.auberer.compilerdesignlectureproject.sema.FunctionTableEntry.validateArgs(FunctionTableEntry.java)
 	at com.auberer.compilerdesignlectureproject.sema.TypeChecker.visitArgLst(TypeChecker.java)
 	at com.auberer.compilerdesignlectureproject.sema.TypeChecker.visitArgLst(TypeChecker.java)
@@ -33,10 +33,10 @@ Compiling with own parser...
 	at com.auberer.compilerdesignlectureproject.sema.TypeChecker.visitVarDecl(TypeChecker.java)
 	at com.auberer.compilerdesignlectureproject.ast.ASTVarDeclNode.accept(ASTVarDeclNode.java)
 	at com.auberer.compilerdesignlectureproject.ast.ASTVisitor.visitChildren(ASTVisitor.java)
-	at com.auberer.compilerdesignlectureproject.ast.ASTVisitor.visistStmt(ASTVisitor.java)
+	at com.auberer.compilerdesignlectureproject.ast.ASTVisitor.visitStmt(ASTVisitor.java)
 	at com.auberer.compilerdesignlectureproject.ast.ASTStmtNode.accept(ASTStmtNode.java)
 	at com.auberer.compilerdesignlectureproject.ast.ASTVisitor.visitChildren(ASTVisitor.java)
-	at com.auberer.compilerdesignlectureproject.ast.ASTVisitor.visistStmtLst(ASTVisitor.java)
+	at com.auberer.compilerdesignlectureproject.ast.ASTVisitor.visitStmtLst(ASTVisitor.java)
 	at com.auberer.compilerdesignlectureproject.ast.ASTStmtLstNode.accept(ASTStmtLstNode.java)
 	at com.auberer.compilerdesignlectureproject.ast.ASTVisitor.visit(ASTVisitor.java)
 	at com.auberer.compilerdesignlectureproject.sema.TypeChecker.visitFunctionDef(TypeChecker.java)
